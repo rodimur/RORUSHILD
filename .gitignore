@@ -1,0 +1,15 @@
+# Flutter/Dart ignore list
+.dart_tool/
+.packages
+.pub/
+build/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+**/*.lock
+*.iml
+.idea/
+android/.gradle/
+android/app/debug
+android/app/profile
+android/app/release
+.DS_Store
