@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:rorusheild2/utils/platform_channel.dart';
 
 class VpnService {
   static final VpnService _instance = VpnService._internal();
@@ -12,7 +13,32 @@ class VpnService {
   bool get isVpnActive => _isVpnActive;
 
   void toggleVpn() {
-    _isVpnActive = !_isVpnActive;
-    _vpnController.add(_isVpnActive);
+    if (_isVpnActive) {
+      _stopVpn();
+    } else {
+      _startVpn();
+    }
   }
-} 
+
+  Future<void> _startVpn() async {
+    try {
+      await PlatformChannel.startVpn(); // Send command to Android to start VPN
+      _isVpnActive = true;
+      _vpnController.add(true);
+    } catch (e) {
+      // Handle error if starting VPN fails
+      print("Error starting VPN: $e");
+    }
+  }
+
+  void _stopVpn() {
+    try {
+      PlatformChannel.stopVpn(); // Send command to Android to stop VPN
+      _isVpnActive = false;
+      _vpnController.add(false);
+    } catch (e) {
+      // Handle error if stopping VPN fails
+      print("Error stopping VPN: $e");
+    }
+  }
+}

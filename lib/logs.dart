@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'services/network_analyzer_service.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 
 class Logs extends StatefulWidget {
   const Logs({super.key});
@@ -12,15 +13,23 @@ class Logs extends StatefulWidget {
 class _LogsState extends State<Logs> {
   final NetworkAnalyzerService _networkAnalyzer = NetworkAnalyzerService();
   List<VisitedDomain> _visitedDomains = [];
+  StreamSubscription<List<VisitedDomain>>? _subscription; // 👈 stream için subscription nesnesi
 
   @override
   void initState() {
     super.initState();
-    _networkAnalyzer.visitedDomainsStream.listen((domains) {
+    _subscription = _networkAnalyzer.visitedDomainsStream.listen((domains) {
+      if (!mounted) return; // 👈 Ekran silindiyse setState çağrılmasın
       setState(() {
         _visitedDomains = domains;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel(); // 👈 ekran kapandığında stream aboneliğini iptal et
+    super.dispose();
   }
 
   String _formatDate(DateTime date) {
@@ -46,49 +55,49 @@ class _LogsState extends State<Logs> {
       backgroundColor: Colors.white,
       body: _visitedDomains.isEmpty
           ? const Center(
-              child: Text(
-                'Henüz ziyaret edilen bağlantı bulunmuyor',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            )
+        child: Text(
+          'Henüz ziyaret edilen bağlantı bulunmuyor',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      )
           : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _visitedDomains.length,
-              itemBuilder: (context, index) {
-                final domain = _visitedDomains[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2196F3).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      leading: const CircleAvatar(
-                        backgroundColor: Colors.blue,
-                        radius: 16,
-                        child: Icon(Icons.language, color: Colors.white, size: 18),
-                      ),
-                      title: Text(
-                        domain.url,
-                        style: const TextStyle(
-                          color: Colors.black87,
-                          fontSize: 14,
-                        ),
-                      ),
-                      subtitle: Text(
-                        _formatDate(domain.timestamp),
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
+        padding: const EdgeInsets.all(16),
+        itemCount: _visitedDomains.length,
+        itemBuilder: (context, index) {
+          final domain = _visitedDomains[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF2196F3).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.blue,
+                  radius: 16,
+                  child: Icon(Icons.language, color: Colors.white, size: 18),
+                ),
+                title: Text(
+                  domain.url,
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14,
                   ),
-                );
-              },
+                ),
+                subtitle: Text(
+                  _formatDate(domain.timestamp),
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 12,
+                  ),
+                ),
+              ),
             ),
+          );
+        },
+      ),
     );
   }
 }
