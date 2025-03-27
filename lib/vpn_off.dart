@@ -12,7 +12,7 @@ class VpnOff extends StatefulWidget {
 
 class _VpnOffState extends State<VpnOff> {
   final VpnService _vpnService = VpnService();
-  final NetworkAnalyzerService _networkAnalyzer = NetworkAnalyzerService();
+  final NetworkAnalyzerService _networkAnalyzer = NetworkAnalyzerService.instance;
   bool _isVpnActive = false;
 
   @override
@@ -54,18 +54,18 @@ class _VpnOffState extends State<VpnOff> {
         ),
         actions: _isVpnActive
             ? [
-          TextButton.icon(
-            onPressed: () {
-              _vpnService.toggleVpn();
-              _networkAnalyzer.stopAnalyzing();
-            },
-            icon: const Icon(Icons.power_settings_new, color: Colors.white),
-            label: const Text(
-              'Kapat',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ]
+                TextButton.icon(
+                  onPressed: () {
+                    _vpnService.toggleVpn();
+                    _networkAnalyzer.stopAnalyzing();
+                  },
+                  icon: const Icon(Icons.power_settings_new, color: Colors.white),
+                  label: const Text(
+                    'Kapat',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ]
             : null,
       ),
       body: Center(

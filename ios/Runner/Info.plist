@@ -45,5 +45,18 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationUsageDescription</key>
+	<string>Uygulamanın konum bilginize ihtiyacı vardır.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Uygulamanın fotoğraf kütüphanenize erişmesi gerekiyor.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Uygulamanın konuşma tanıma özelliğini kullanması gerekiyor.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Bu bilgiler size özelleştirilmiş reklam içeriği sunmak için kullanılacaktır.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

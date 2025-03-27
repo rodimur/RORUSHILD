@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RoruShield</string>
+    <string name="accessibility_service_description">RoruShield, ziyaret ettiğiniz web sitelerini izleyerek güvenli olmayan bağlantıları tespit etmenize yardımcı olur.</string>
+</resources> 
