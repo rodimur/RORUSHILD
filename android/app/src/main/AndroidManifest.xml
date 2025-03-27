@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.BIND_VPN_SERVICE" />
 
     <application
-        android:label="rorusheild2"
+        android:label="RoRü Shield"
         android:name=".RoruShieldApplication"
         android:icon="@mipmap/ic_launcher">
 
