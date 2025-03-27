@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'services/network_analyzer_service.dart';
 import 'services/vpn_service.dart';
 
 /// This class represents the VPN Off page and allows interaction to enable the VPN.
@@ -12,7 +11,6 @@ class VpnOff extends StatefulWidget {
 
 class _VpnOffState extends State<VpnOff> {
   final VpnService _vpnService = VpnService();
-  final NetworkAnalyzerService _networkAnalyzer = NetworkAnalyzerService.instance;
   bool _isVpnActive = false;
 
   @override
@@ -57,7 +55,6 @@ class _VpnOffState extends State<VpnOff> {
                 TextButton.icon(
                   onPressed: () {
                     _vpnService.toggleVpn();
-                    _networkAnalyzer.stopAnalyzing();
                   },
                   icon: const Icon(Icons.power_settings_new, color: Colors.white),
                   label: const Text(
@@ -122,7 +119,14 @@ class _VpnOffState extends State<VpnOff> {
                   GestureDetector(
                     onTap: () {
                       _vpnService.toggleVpn();
-                      _networkAnalyzer.startAnalyzing();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(_isVpnActive 
+                            ? 'VPN kapatılıyor...' 
+                            : 'VPN başlatılıyor...'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
                     },
                     child: Container(
                       width: 60,

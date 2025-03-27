@@ -36,13 +36,14 @@ class MainActivity : FlutterActivity() {
                     }
                 }
                 "stopVpn" -> {
-                    // VPN servisini durdurma işlemi
-                    stopService(Intent(this, MyVpnService::class.java))
+                    val stopIntent = Intent(this, MyVpnService::class.java)
+                    stopIntent.putExtra("COMMAND", "STOP")
+                    startService(stopIntent)
                     result.success("VPN Durduruldu")
                 }
                 "checkVpnStatus" -> {
                     val vpnService = MyVpnService.instance
-                    result.success(vpnService?.isRunning ?: false)
+                    result.success(vpnService != null && vpnService.isRunning)
                 }
                 else -> result.notImplemented()
             }

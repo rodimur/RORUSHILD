@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'services/network_analyzer_service.dart';
 import 'services/notification_service.dart';
+import 'services/vpn_service.dart';
 import 'data_usage_screen.dart';
 
 void main() async {
@@ -33,7 +34,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.light;
-  static const MethodChannel _channel = MethodChannel('com.example.rorusheild2/vpn_channel');
   static const platform = MethodChannel('com.example.rorusheild2/accessibility');
   static const eventChannel = EventChannel('com.example.rorusheild2/url_events');
   final NetworkAnalyzerService _networkAnalyzer = NetworkAnalyzerService.instance;
@@ -42,7 +42,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _initializeMethodChannel();
     _checkAccessibilityPermission();
     _setupUrlListener();
     _networkAnalyzer.loadBlacklist();
@@ -51,27 +50,6 @@ class _MyAppState extends State<MyApp> {
   void toggleTheme() {
     setState(() {
       _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-    });
-  }
-
-  void _initializeMethodChannel() {
-    _channel.setMethodCallHandler((call) async {
-      if (call.method == 'addDomain') {
-        final domain = call.arguments as String;
-        debugPrint("🔥 Flutter'a gelen domain: $domain");
-        await _networkAnalyzer.addDomain(domain);
-      } else if (call.method == 'vpnStatus') {
-        final status = call.arguments as String;
-        if (status == "active") {
-          setState(() {
-            // VPN aktif olduğunda ekranı güncelle
-          });
-        } else {
-          setState(() {
-            // VPN kapalı olduğunda ekranı güncelle
-          });
-        }
-      }
     });
   }
 

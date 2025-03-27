@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.rorusheild2">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -11,19 +12,22 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.BIND_VPN_SERVICE" />
 
     <application
         android:label="rorusheild2"
-        android:name="${applicationName}"
+        android:name=".RoruShieldApplication"
         android:icon="@mipmap/ic_launcher">
 
-        <!-- VPN servis tanımı buraya taşındı ✅ -->
-        <service
+        <!-- OpenVPN servis tanımını kaldırdık -->
+
+        <!-- VPN servisi -->
+        <service 
             android:name=".MyVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.net.VpnService" />
+                <action android:name="android.net.VpnService"/>
             </intent-filter>
         </service>
 
