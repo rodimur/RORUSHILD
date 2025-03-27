@@ -53,8 +53,10 @@ class _CircularDataChartState extends State<CircularDataChart> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? Colors.grey[900] : Colors.white,
       body: Column(
         children: [
           const SizedBox(height: 60),
@@ -107,9 +109,10 @@ class _CircularDataChartState extends State<CircularDataChart> {
                       const SizedBox(height: 4),
                       Text(
                         '${category['usage']} GB',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
+                          color: isDark ? Colors.white : Colors.black,
                         ),
                       ),
                     ],
@@ -135,25 +138,33 @@ class _CircularDataChartState extends State<CircularDataChart> {
                     decoration: BoxDecoration(
                       color: selectedAppIndex == index
                           ? Colors.blue
-                          : Colors.blue.withOpacity(0.1),
+                          : (isDark 
+                              ? Colors.grey[800] 
+                              : Colors.blue.withOpacity(0.1)),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
                       leading: Icon(
                         app['icon'] as IconData,
-                        color: selectedAppIndex == index ? Colors.white : Colors.blue,
+                        color: selectedAppIndex == index 
+                            ? Colors.white 
+                            : (isDark ? Colors.blue[300] : Colors.blue),
                       ),
                       title: Text(
                         app['name'] as String,
                         style: TextStyle(
-                          color: selectedAppIndex == index ? Colors.white : Colors.black87,
+                          color: selectedAppIndex == index 
+                              ? Colors.white 
+                              : (isDark ? Colors.white : Colors.black87),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       trailing: Text(
                         '${app['usage']} GB',
                         style: TextStyle(
-                          color: selectedAppIndex == index ? Colors.white : Colors.black87,
+                          color: selectedAppIndex == index 
+                              ? Colors.white 
+                              : (isDark ? Colors.white : Colors.black87),
                           fontWeight: FontWeight.w500,
                         ),
                       ),

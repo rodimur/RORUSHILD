@@ -68,11 +68,13 @@ class _UnsafeLogsState extends State<UnsafeLogs> with AutomaticKeepAliveClientMi
   @override
   Widget build(BuildContext context) {
     super.build(context); // AutomaticKeepAliveClientMixin için gerekli
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? Colors.grey[900] : Colors.white,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Tehlikeli Bağlantılar',
           style: TextStyle(
             color: Colors.red,
@@ -83,19 +85,22 @@ class _UnsafeLogsState extends State<UnsafeLogs> with AutomaticKeepAliveClientMi
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.red),
+            icon: Icon(Icons.refresh, color: Colors.red),
             onPressed: _loadDomains,
           ),
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? Colors.grey[900] : Colors.white,
       body: _isLoading 
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : _unsafeDomains.isEmpty
-              ? const Center(
+              ? Center(
                   child: Text(
                     'Henüz tehlikeli bağlantı bulunmuyor',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: isDark ? Colors.grey[400] : Colors.grey[600],
+                    ),
                   ),
                 )
               : ListView.builder(
@@ -107,7 +112,9 @@ class _UnsafeLogsState extends State<UnsafeLogs> with AutomaticKeepAliveClientMi
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFFE53935).withOpacity(0.1),
+                          color: isDark 
+                              ? Colors.red.withOpacity(0.2) 
+                              : const Color(0xFFE53935).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
@@ -119,15 +126,15 @@ class _UnsafeLogsState extends State<UnsafeLogs> with AutomaticKeepAliveClientMi
                           ),
                           title: Text(
                             domain.url,
-                            style: const TextStyle(
-                              color: Colors.black87,
+                            style: TextStyle(
+                              color: isDark ? Colors.white : Colors.black87,
                               fontSize: 14,
                             ),
                           ),
                           subtitle: Text(
                             _formatDate(domain.timestamp),
                             style: TextStyle(
-                              color: Colors.grey[600],
+                              color: isDark ? Colors.grey[400] : Colors.grey[600],
                               fontSize: 12,
                             ),
                           ),

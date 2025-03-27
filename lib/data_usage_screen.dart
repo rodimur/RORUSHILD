@@ -91,6 +91,7 @@ class _DataUsageScreenState extends State<DataUsageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final sayfalar = [
       const CircularDataChart(),
       const VpnOff(),
@@ -175,9 +176,9 @@ class _DataUsageScreenState extends State<DataUsageScreen> {
           ),
         ],
         currentIndex: selectedIndex,
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? Colors.grey[850] : Colors.white,
         selectedItemColor: const Color(0xFF1959E4),
-        unselectedItemColor: const Color(0xFFA3BDF5),
+        unselectedItemColor: isDark ? Colors.grey[500] : const Color(0xFFA3BDF5),
         onTap: (index) {
           setState(() {
             selectedIndex = index;

@@ -28,22 +28,31 @@ class _VpnOffState extends State<VpnOff> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = _isVpnActive 
+        ? Colors.blue 
+        : (isDark ? Colors.grey[900] : Colors.white);
+    
     return Scaffold(
-      backgroundColor: _isVpnActive ? Colors.blue : Colors.white,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: _isVpnActive ? Colors.blue : Colors.white,
+        backgroundColor: backgroundColor,
         elevation: 0,
         title: Row(
           children: [
             Icon(
               Icons.shield_outlined,
-              color: _isVpnActive ? Colors.white : Colors.blue,
+              color: _isVpnActive 
+                  ? Colors.white 
+                  : (isDark ? Colors.blue : Colors.blue),
             ),
             const SizedBox(width: 8),
             Text(
               'VPN',
               style: TextStyle(
-                color: _isVpnActive ? Colors.white : Colors.blue,
+                color: _isVpnActive 
+                    ? Colors.white 
+                    : (isDark ? Colors.white : Colors.blue),
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -111,7 +120,9 @@ class _VpnOffState extends State<VpnOff> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.blue.withOpacity(0.2),
+                          color: isDark 
+                              ? Colors.blue.withOpacity(0.4)
+                              : Colors.blue.withOpacity(0.2),
                           width: 1.5,
                         ),
                       ),
