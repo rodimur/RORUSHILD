@@ -12,8 +12,10 @@ class NetworkAnalyzerService {
 
   NetworkAnalyzerService._internal();
 
-  final StreamController<List<VisitedDomain>> _visitedDomainsController = StreamController<List<VisitedDomain>>.broadcast();
-  final StreamController<List<VisitedDomain>> _dangerousDomainsController = StreamController<List<VisitedDomain>>.broadcast();
+  final StreamController<List<VisitedDomain>> _visitedDomainsController =
+  StreamController<List<VisitedDomain>>.broadcast();
+  final StreamController<List<VisitedDomain>> _dangerousDomainsController =
+  StreamController<List<VisitedDomain>>.broadcast();
 
   Stream<List<VisitedDomain>> get visitedDomainsStream => _visitedDomainsController.stream;
   Stream<List<VisitedDomain>> get dangerousDomainsStream => _dangerousDomainsController.stream;
@@ -23,7 +25,7 @@ class NetworkAnalyzerService {
   List<String> _blacklist = [];
   bool _isAnalyzing = false;
   final DatabaseService _dbService = DatabaseService.instance;
-  
+
   // Son işlenen URL'yi ve işlem zamanını saklayacak değişkenler
   String _lastProcessedUrl = '';
   DateTime? _lastProcessedTime;
@@ -38,7 +40,7 @@ class NetworkAnalyzerService {
           .where((line) => line.isNotEmpty)
           .toList();
       debugPrint('📋 Blacklist yüklendi: ${_blacklist.length} domain');
-      
+
       // Veritabanındaki domainleri yükle
       await _loadDomainsFromDatabase();
     } catch (e) {
@@ -53,35 +55,46 @@ class NetworkAnalyzerService {
       final safeDomains = await _dbService.getSafeDomains();
       _visitedDomains = safeDomains;
       _visitedDomainsController.add(_visitedDomains);
-      
+
       // Tehlikeli domainleri veritabanından yükle
       final unsafeDomains = await _dbService.getUnsafeDomains();
       _dangerousDomains = unsafeDomains;
       _dangerousDomainsController.add(_dangerousDomains);
-      
+
       debugPrint('📂 Veritabanından ${safeDomains.length} güvenli, ${unsafeDomains.length} tehlikeli domain yüklendi');
     } catch (e) {
       debugPrint('❌ Veritabanından domainler yüklenirken hata: $e');
     }
   }
 
+  // "www." önekini kaldırarak asıl domain'i elde ediyoruz.
+  String _getMainDomain(String domain) {
+    if (domain.startsWith("www.")) {
+      return domain.substring(4);
+    }
+    return domain;
+  }
+
   bool _isUrlInBlacklist(String url) {
     try {
       final uri = Uri.parse(url.toLowerCase());
-      final domain = uri.host;
+      // Domain bilgisini alırken "www." önekini kaldırıyoruz.
+      final domain = _getMainDomain(uri.host);
       final path = uri.path;
-      
+
       debugPrint('🔍 URL kontrol ediliyor: $url');
       debugPrint('📌 Domain: $domain');
       debugPrint('📌 Path: $path');
-      
+
       for (final pattern in _blacklist) {
-        if (domain.contains(pattern) || pattern.contains(domain)) {
+        // blacklist pattern'i de "www." içerebilir; karşılaştırmayı yapmadan önce kaldırabilirsiniz.
+        final mainPattern = _getMainDomain(pattern);
+        if (domain == mainPattern) {
           debugPrint('⚠️ Tehlikeli domain tespit edildi: $pattern');
           return true;
         }
       }
-      
+
       debugPrint('✅ Domain güvenli');
       return false;
     } catch (e) {
@@ -93,26 +106,28 @@ class NetworkAnalyzerService {
   Future<void> addDomain(String url) async {
     if (url.isEmpty) return;
 
+    debugPrint('🔔 addDomain metodu çağrıldı: $url');
+
     try {
       final uri = Uri.parse(url);
       if (!uri.hasScheme || !uri.host.contains('.')) return;
-      
+
       // Eğer aynı URL son 15 saniye içinde işlendiyse tekrar işleme
       final now = DateTime.now();
-      if (url == _lastProcessedUrl && _lastProcessedTime != null && 
+      if (url == _lastProcessedUrl && _lastProcessedTime != null &&
           now.difference(_lastProcessedTime!).inSeconds < 15) {
         debugPrint('⏱️ Aynı URL son 15 saniye içinde işlendiği için atlanıyor: $url');
         return;
       }
-      
+
       // İşlenen URL ve zamanını güncelle
       _lastProcessedUrl = url;
       _lastProcessedTime = now;
-      
+
       final isSafe = !_isUrlInBlacklist(url);
       final domain = uri.host;
       final path = uri.path;
-      
+
       final visitedDomain = VisitedDomain(
         url: url,
         domain: domain,
@@ -123,13 +138,14 @@ class NetworkAnalyzerService {
 
       // Veritabanına kaydet
       await _dbService.addVisitedDomain(visitedDomain);
+      debugPrint('✅ Veritabanına domain başarıyla eklendi: $url');
 
       if (!isSafe) {
         // Tehlikeli alan - her zaman ekle
         _dangerousDomains.add(visitedDomain);
         _dangerousDomainsController.add(_dangerousDomains);
         debugPrint('⚠️ Tehlikeli domain tespit edildi: $url');
-        
+
         // Tehlikeli domain bildirimini gönder
         await NotificationService.instance.showDangerousWebsiteNotification(domain);
       } else {
@@ -145,10 +161,12 @@ class NetworkAnalyzerService {
 
   void startAnalyzing() {
     _isAnalyzing = true;
+    debugPrint('▶️ Analiz başlatıldı.');
   }
 
   void stopAnalyzing() {
     _isAnalyzing = false;
+    debugPrint('⏹️ Analiz durduruldu.');
   }
 
   void clearDomains() {
@@ -162,5 +180,6 @@ class NetworkAnalyzerService {
   void dispose() {
     _visitedDomainsController.close();
     _dangerousDomainsController.close();
+    debugPrint('🚮 Stream controllerlar kapatıldı.');
   }
 }

@@ -2,6 +2,7 @@ package com.example.rorusheild2
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.net.Uri
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import io.flutter.plugin.common.EventChannel
@@ -13,7 +14,7 @@ class UrlAccessibilityService : AccessibilityService() {
 
     companion object {
         private var instance: UrlAccessibilityService? = null
-        
+
         fun getInstance(): UrlAccessibilityService? {
             return instance
         }
@@ -24,8 +25,8 @@ class UrlAccessibilityService : AccessibilityService() {
         val info = AccessibilityServiceInfo()
         info.apply {
             eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED or
-                        AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED or
-                        AccessibilityEvent.TYPE_VIEW_FOCUSED
+                    AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED or
+                    AccessibilityEvent.TYPE_VIEW_FOCUSED
             feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
             flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS or
                     AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS or
@@ -57,10 +58,15 @@ class UrlAccessibilityService : AccessibilityService() {
         // Chrome'un URL çubuğunu bul
         val urlBar = node.findAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar")
         if (!urlBar.isNullOrEmpty()) {
-            val url = urlBar[0].text?.toString()
+            val urlText = urlBar[0].text?.toString()
             urlBar.forEach { it.recycle() }
-            if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
-                return url
+            if (urlText != null) {
+                // Eğer URL protokol içeriyorsa direkt döndür, içermiyorsa "https://" ekleyerek döndür.
+                return if (urlText.startsWith("http://") || urlText.startsWith("https://")) {
+                    urlText
+                } else {
+                    "https://$urlText"
+                }
             }
         }
 
@@ -90,4 +96,4 @@ class UrlAccessibilityService : AccessibilityService() {
     fun setEventSink(sink: EventChannel.EventSink?) {
         eventSink = sink
     }
-} 
+}
