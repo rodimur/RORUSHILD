@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/services.dart';
 
 class CircularDataChart extends StatefulWidget {
   const CircularDataChart({super.key});
@@ -10,54 +12,95 @@ class CircularDataChart extends StatefulWidget {
 
 class _CircularDataChartState extends State<CircularDataChart> {
   int selectedAppIndex = 0;
-  
-  final List<Map<String, dynamic>> apps = [
-    {
-      'name': 'YouTube',
-      'icon': FontAwesomeIcons.youtube,
-      'usage': 14.26,
-      'color': Colors.blue,
-    },
-    {
-      'name': 'Instagram',
-      'icon': FontAwesomeIcons.instagram,
-      'usage': 14.26,
-      'color': Colors.blue.shade300,
-    },
-    {
-      'name': 'Spotify',
-      'icon': FontAwesomeIcons.spotify,
-      'usage': 14.26,
-      'color': Colors.blue.shade200,
-    },
-    {
-      'name': 'Telegram',
-      'icon': FontAwesomeIcons.telegram,
-      'usage': 14.26,
-      'color': Colors.blue.shade100,
-    },
-    {
-      'name': 'LinkedIn',
-      'icon': FontAwesomeIcons.linkedin,
-      'usage': 14.26,
-      'color': Colors.blue.shade50,
-    },
+  // Uygulama kullanım verileri (örn. getAppUsage ile)
+  List<Map<String, dynamic>> apps = [];
+
+  // Kategori verileri: Download, Upload, Wi-Fi, Mobile
+  final List<Map<String, dynamic>> categories = [
+    {'name': 'Download', 'icon': Icons.download, 'usage': 0.0},
+    {'name': 'Upload', 'icon': Icons.upload, 'usage': 0.0},
+    {'name': 'Wi-Fi', 'icon': Icons.wifi, 'usage': 0.0},
+    {'name': 'Mobile', 'icon': Icons.cell_tower, 'usage': 0.0},
   ];
 
-  final List<Map<String, dynamic>> categories = [
-    {'name': 'Mobil Veri', 'icon': Icons.cell_tower, 'usage': 24.01},
-    {'name': 'Hotspot', 'icon': Icons.wifi_tethering, 'usage': 2.77},
-    {'name': 'Wi-Fi', 'icon': Icons.wifi, 'usage': 18.10},
-    {'name': 'Uygulama', 'icon': Icons.phone_android, 'usage': 8.68},
-  ];
+  static const MethodChannel _appUsageChannel =
+  MethodChannel('com.example.rorusheild2/app_usage');
+  static const MethodChannel _networkUsageChannel =
+  MethodChannel('com.example.rorusheild2/network_usage');
+
+  Timer? _usageTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppUsage(); // Uygulama bazlı veriler
+    _loadDetailedUsage(); // Download, Upload, Wi-Fi, Mobile verileri
+    // Her 10 dakikada bir verileri güncelle (7 gün bazında)
+    _usageTimer = Timer.periodic(const Duration(minutes: 10), (_) {
+      _loadAppUsage();
+      _loadDetailedUsage();
+    });
+  }
+
+  Future<void> _loadAppUsage() async {
+    try {
+      final List<dynamic> result =
+      await _appUsageChannel.invokeMethod('getAppUsage');
+      setState(() {
+        apps = result.map((data) {
+          return {
+            'name': data['appName'],
+            'usage': (data['usage'] as num).toDouble(),
+            'icon': FontAwesomeIcons.mobileAlt,
+            'color': Colors.blue,
+          };
+        }).toList();
+        selectedAppIndex = apps.isNotEmpty ? 0 : 0;
+      });
+    } catch (e) {
+      print("App usage verileri yüklenirken hata: $e");
+    }
+  }
+
+  Future<void> _loadDetailedUsage() async {
+    try {
+      final Map<dynamic, dynamic> result =
+      await _networkUsageChannel.invokeMethod('getDetailedNetworkUsage');
+      final double mobileRx = (result['mobileRx'] as num).toDouble();
+      final double mobileTx = (result['mobileTx'] as num).toDouble();
+      final double wifiRx = (result['wifiRx'] as num).toDouble();
+      final double wifiTx = (result['wifiTx'] as num).toDouble();
+
+      setState(() {
+        // Download: Toplam rx (Wi-Fi + Mobile)
+        categories[0]['usage'] = wifiRx + mobileRx;
+        // Upload: Toplam tx (Wi-Fi + Mobile)
+        categories[1]['usage'] = wifiTx + mobileTx;
+        // Wi-Fi total: rx + tx
+        categories[2]['usage'] = wifiRx + wifiTx;
+        // Mobile total: rx + tx
+        categories[3]['usage'] = mobileRx + mobileTx;
+      });
+    } catch (e) {
+      print("Detaylı network verisi alınırken hata: $e");
+    }
+  }
+
+  @override
+  void dispose() {
+    _usageTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Scaffold(
       backgroundColor: isDark ? Colors.grey[900] : Colors.white,
-      body: Column(
+      body: apps.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
         children: [
           const SizedBox(height: 60),
           SizedBox(
@@ -80,7 +123,7 @@ class _CircularDataChartState extends State<CircularDataChart> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${apps[selectedAppIndex]['usage']}',
+                      '${apps[selectedAppIndex]['usage'].toStringAsFixed(2)}',
                       style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -99,26 +142,25 @@ class _CircularDataChartState extends State<CircularDataChart> {
               ],
             ),
           ),
+          // Kategori satırı (Download, Upload, Wi-Fi, Mobile)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: categories
-                .map(
-                  (category) => Column(
-                    children: [
-                      Icon(category['icon'] as IconData, color: Colors.blue),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${category['usage']} GB',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: isDark ? Colors.white : Colors.black,
-                        ),
-                      ),
-                    ],
+            children: categories.map((category) {
+              return Column(
+                children: [
+                  Icon(category['icon'] as IconData, color: Colors.blue),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${(category['usage'] as double).toStringAsFixed(2)} GB',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
                   ),
-                )
-                .toList(),
+                ],
+              );
+            }).toList(),
           ),
           const SizedBox(height: 20),
           Expanded(
@@ -138,32 +180,30 @@ class _CircularDataChartState extends State<CircularDataChart> {
                     decoration: BoxDecoration(
                       color: selectedAppIndex == index
                           ? Colors.blue
-                          : (isDark 
-                              ? Colors.grey[800] 
-                              : Colors.blue.withOpacity(0.1)),
+                          : (isDark ? Colors.grey[800] : Colors.blue.withOpacity(0.1)),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
                       leading: Icon(
                         app['icon'] as IconData,
-                        color: selectedAppIndex == index 
-                            ? Colors.white 
+                        color: selectedAppIndex == index
+                            ? Colors.white
                             : (isDark ? Colors.blue[300] : Colors.blue),
                       ),
                       title: Text(
                         app['name'] as String,
                         style: TextStyle(
-                          color: selectedAppIndex == index 
-                              ? Colors.white 
+                          color: selectedAppIndex == index
+                              ? Colors.white
                               : (isDark ? Colors.white : Colors.black87),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       trailing: Text(
-                        '${app['usage']} GB',
+                        '${(app['usage'] as double).toStringAsFixed(2)} GB',
                         style: TextStyle(
-                          color: selectedAppIndex == index 
-                              ? Colors.white 
+                          color: selectedAppIndex == index
+                              ? Colors.white
                               : (isDark ? Colors.white : Colors.black87),
                           fontWeight: FontWeight.w500,
                         ),
@@ -197,7 +237,7 @@ class CircularChartPainter extends CustomPainter {
     final radius = size.width / 2;
     final paint = Paint()..style = PaintingStyle.stroke..strokeWidth = 25;
 
-    double startAngle = -90 * (3.14159 / 180); // Start from top
+    double startAngle = -90 * (3.14159 / 180);
     final total = segments.reduce((a, b) => a + b);
 
     for (int i = 0; i < segments.length; i++) {
