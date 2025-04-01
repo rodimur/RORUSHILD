@@ -6,6 +6,7 @@ import android.app.usage.NetworkStatsManager
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.net.TrafficStats
 import android.net.VpnService
 import android.os.Build
 import android.os.Bundle
@@ -25,17 +26,19 @@ import java.util.Calendar
 class MainActivity : FlutterActivity() {
     companion object {
         lateinit var channel: MethodChannel
+        private var cachedAppUsage: List<Map<String, Any>>? = null
+        private var lastCacheTime: Long = 0
+        private const val CACHE_DURATION = 10000 // 10 saniye cache süresi
     }
 
     private val CHANNEL = "com.example.rorusheild2/accessibility"
     private val EVENT_CHANNEL = "com.example.rorusheild2/url_events"
     private val NETWORK_USAGE_CHANNEL = "com.example.rorusheild2/network_usage"
-    // Uygulama kullanım verilerini sağlamak için yeni channel
     private val APP_USAGE_CHANNEL = "com.example.rorusheild2/app_usage"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Otomatik kullanım erişimi izni kontrolü
+        // Kullanım erişimi iznini kontrol et – eksikse yönlendir
         if (!hasUsageAccessPermission()) {
             openUsageAccessSettings()
         }
@@ -44,7 +47,7 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        // VPN channel
+        // VPN ile ilgili kanal
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.example.rorusheild2/vpn_channel")
         channel.setMethodCallHandler { call, result ->
             when (call.method) {
@@ -71,13 +74,11 @@ class MainActivity : FlutterActivity() {
             }
         }
 
-        // Erişilebilirlik ve kullanım erişimi ayarlarına yönlendirme için kanal
+        // Erişilebilirlik ve kullanım erişimi ayarları kanalı
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
-                    "checkAccessibilityPermission" -> {
-                        result.success(isAccessibilityServiceEnabled())
-                    }
+                    "checkAccessibilityPermission" -> result.success(isAccessibilityServiceEnabled())
                     "openAccessibilitySettings" -> {
                         openAccessibilitySettings()
                         result.success(null)
@@ -90,7 +91,7 @@ class MainActivity : FlutterActivity() {
                 }
             }
 
-        // Network kullanım verileri (detaylı: download/upload vs.)
+        // Network kullanım verileri kanalı – TrafficStats API kullanımıyla
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, NETWORK_USAGE_CHANNEL)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -106,35 +107,36 @@ class MainActivity : FlutterActivity() {
                 }
             }
 
-        // Uygulama kullanım verilerini getiren channel handler
+        // Uygulama kullanım verilerini getiren kanal (mevcut UID bazlı ölçüm yöntemi)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, APP_USAGE_CHANNEL)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
                     "getAppUsage" -> {
                         try {
+                            val currentTime = System.currentTimeMillis()
+                            
+                            // Önbellekteki veri 10 saniyeden yeni ise onu kullan
+                            if (cachedAppUsage != null && (currentTime - lastCacheTime) < CACHE_DURATION) {
+                                result.success(cachedAppUsage)
+                                return@setMethodCallHandler
+                            }
+
                             val appUsageList = mutableListOf<Map<String, Any>>()
                             val networkStatsManager = getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
-                            // Son 7 gün için
-                            val startTime = System.currentTimeMillis() - (7L * 24 * 60 * 60 * 1000)
+                            // Son 30 gün (1 ay) için
+                            val startTime = System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000)
                             val endTime = System.currentTimeMillis()
-
                             val pm = packageManager
                             val installedApps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
                             val tempBucket = NetworkStats.Bucket()
-
                             for (app in installedApps) {
-                                // Eğer uygulama sistem uygulaması VE güncellenmiş sistem uygulaması değilse atla.
                                 if ((app.flags and ApplicationInfo.FLAG_SYSTEM) != 0 &&
                                     (app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0) {
                                     continue
                                 }
                                 try {
                                     val uid = app.uid
-
-                                    // Mobil veri kullanımı sorgulaması
-                                    val subscriberId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                        ""
-                                    } else {
+                                    val subscriberId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "" else {
                                         try {
                                             val tm = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
                                             tm.subscriberId ?: ""
@@ -155,8 +157,6 @@ class MainActivity : FlutterActivity() {
                                         mobileBytes += tempBucket.rxBytes + tempBucket.txBytes
                                     }
                                     mobileBucket.close()
-
-                                    // Wi-Fi kullanımı sorgulaması
                                     val wifiBucket = networkStatsManager.queryDetailsForUid(
                                         ConnectivityManager.TYPE_WIFI,
                                         "",
@@ -170,7 +170,6 @@ class MainActivity : FlutterActivity() {
                                         wifiBytes += tempBucket.rxBytes + tempBucket.txBytes
                                     }
                                     wifiBucket.close()
-
                                     val totalBytes = mobileBytes + wifiBytes
                                     val usageGB = totalBytes.toDouble() / (1024 * 1024 * 1024)
                                     val appLabel = pm.getApplicationLabel(app).toString()
@@ -180,6 +179,11 @@ class MainActivity : FlutterActivity() {
                                 }
                             }
                             appUsageList.sortByDescending { it["usage"] as Double }
+                            
+                            // Sonucu önbelleğe al
+                            cachedAppUsage = appUsageList
+                            lastCacheTime = currentTime
+                            
                             result.success(appUsageList)
                         } catch (e: Exception) {
                             result.error("UNAVAILABLE", "App usage data not available: ${e.message}", null)
@@ -233,118 +237,75 @@ class MainActivity : FlutterActivity() {
         startActivity(intent)
     }
 
+    // TrafficStats API kullanarak anlık mobil veri kullanımını hesaplar
     private fun getMobileDataUsage(): Double {
-        try {
-            val networkStatsManager = getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
-            // Son 7 gün için
-            val startTime = System.currentTimeMillis() - (7L * 24 * 60 * 60 * 1000)
-            val endTime = System.currentTimeMillis()
-            val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            val subscriberId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "" else {
-                try {
-                    telephonyManager.subscriberId ?: ""
-                } catch (e: Exception) {
-                    ""
-                }
-            }
-            val bucket = networkStatsManager.querySummaryForDevice(
-                ConnectivityManager.TYPE_MOBILE,
-                subscriberId,
-                startTime,
-                endTime
-            )
-            val mobileBytes = bucket.rxBytes + bucket.txBytes
-            return mobileBytes.toDouble() / (1024 * 1024 * 1024)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return 0.0
-        }
+        val mobileRx = TrafficStats.getMobileRxBytes()
+        val mobileTx = TrafficStats.getMobileTxBytes()
+        val mobileBytes = mobileRx + mobileTx
+        return mobileBytes.toDouble() / (1024 * 1024 * 1024)
     }
 
+    // TrafficStats API kullanarak Wi‑Fi veri kullanımını hesaplar
     private fun getWifiDataUsage(): Double {
-        try {
-            val networkStatsManager = getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
-            // Son 7 gün için
-            val startTime = System.currentTimeMillis() - (7L * 24 * 60 * 60 * 1000)
-            val endTime = System.currentTimeMillis()
-            val bucket = networkStatsManager.querySummaryForDevice(
-                ConnectivityManager.TYPE_WIFI,
-                "",
-                startTime,
-                endTime
-            )
-            val wifiBytes = bucket.rxBytes + bucket.txBytes
-            return wifiBytes.toDouble() / (1024 * 1024 * 1024)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return 0.0
-        }
+        val totalRx = TrafficStats.getTotalRxBytes()
+        val totalTx = TrafficStats.getTotalTxBytes()
+        val mobileRx = TrafficStats.getMobileRxBytes()
+        val mobileTx = TrafficStats.getMobileTxBytes()
+        val wifiBytes = (totalRx - mobileRx) + (totalTx - mobileTx)
+        return wifiBytes.toDouble() / (1024 * 1024 * 1024)
     }
 
-    // Yeni: Ayrı download & upload verilerini toplayan metot
+    // Ayrı download & upload verilerini toplayan metot (TrafficStats ile – cihaz yeniden başlatılana kadar kümülatif değerler)
     private fun getDetailedNetworkUsage(): Map<String, Double> {
-        // Son 7 gün
-        val startTime = System.currentTimeMillis() - (7L * 24 * 60 * 60 * 1000)
-        val endTime = System.currentTimeMillis()
+        val prefs = getSharedPreferences("network_stats", Context.MODE_PRIVATE)
 
-        val networkStatsManager = getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
-        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        val subscriberId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "" else {
-            try {
-                telephonyManager.subscriberId ?: ""
-            } catch (e: Exception) {
-                ""
+        // Mevcut mobil veri değerlerini al
+        val currentMobileRx = TrafficStats.getMobileRxBytes()
+        val currentMobileTx = TrafficStats.getMobileTxBytes()
+
+        // Son kaydedilen mobil veri değerlerini al
+        val lastMobileRx = prefs.getLong("last_mobile_rx", currentMobileRx)
+        val lastMobileTx = prefs.getLong("last_mobile_tx", currentMobileTx)
+
+        // Eğer mevcut değerler 0 ise (WiFi bağlantısında), son kaydedilen değerleri kullan
+        val mobileRx = if (currentMobileRx > 0) currentMobileRx else lastMobileRx
+        val mobileTx = if (currentMobileTx > 0) currentMobileTx else lastMobileTx
+
+        // Toplam veri değerlerini al
+        val totalRx = TrafficStats.getTotalRxBytes()
+        val totalTx = TrafficStats.getTotalTxBytes()
+
+        // WiFi değerlerini hesapla (toplam - mobil)
+        val wifiRx = totalRx - currentMobileRx
+        val wifiTx = totalTx - currentMobileTx
+
+        // Eğer mevcut mobil değerler 0'dan büyükse, değerleri kaydet
+        if (currentMobileRx > 0 && currentMobileTx > 0) {
+            prefs.edit().apply {
+                putLong("last_mobile_rx", currentMobileRx)
+                putLong("last_mobile_tx", currentMobileTx)
+                apply()
             }
         }
-
-        var mobileRx = 0L
-        var mobileTx = 0L
-        var wifiRx = 0L
-        var wifiTx = 0L
-
-        // Mobil veri
-        val mobileStats = networkStatsManager.querySummary(
-            ConnectivityManager.TYPE_MOBILE,
-            subscriberId,
-            startTime,
-            endTime
-        )
-        val mobileBucket = NetworkStats.Bucket()
-        while (mobileStats.hasNextBucket()) {
-            mobileStats.getNextBucket(mobileBucket)
-            mobileRx += mobileBucket.rxBytes
-            mobileTx += mobileBucket.txBytes
-        }
-        mobileStats.close()
-
-        // Wi-Fi
-        val wifiStats = networkStatsManager.querySummary(
-            ConnectivityManager.TYPE_WIFI,
-            "",
-            startTime,
-            endTime
-        )
-        val wifiBucket = NetworkStats.Bucket()
-        while (wifiStats.hasNextBucket()) {
-            wifiStats.getNextBucket(wifiBucket)
-            wifiRx += wifiBucket.rxBytes
-            wifiTx += wifiBucket.txBytes
-        }
-        wifiStats.close()
 
         fun bytesToGb(value: Long): Double {
             return value.toDouble() / (1024 * 1024 * 1024)
         }
 
+        // Tüm download ve upload değerlerini topla
+        val totalDownload = bytesToGb(totalRx)
+        val totalUpload = bytesToGb(totalTx)
+
         return mapOf(
             "mobileRx" to bytesToGb(mobileRx),
             "mobileTx" to bytesToGb(mobileTx),
             "wifiRx" to bytesToGb(wifiRx),
-            "wifiTx" to bytesToGb(wifiTx)
+            "wifiTx" to bytesToGb(wifiTx),
+            "totalRx" to totalDownload,  // Toplam download
+            "totalTx" to totalUpload     // Toplam upload
         )
     }
 
-    // Kullanım erişimi iznini kontrol eden metod
     private fun hasUsageAccessPermission(): Boolean {
         val appOps = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

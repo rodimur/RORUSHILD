@@ -12,14 +12,14 @@ class CircularDataChart extends StatefulWidget {
 
 class _CircularDataChartState extends State<CircularDataChart> {
   int selectedAppIndex = 0;
-  // Uygulama kullanım verileri (örn. getAppUsage ile)
+  // Uygulama kullanım verileri (getAppUsage ile)
   List<Map<String, dynamic>> apps = [];
 
-  // Kategori verileri: Download, Upload, Wi-Fi, Mobile
+  // Kategori verileri: Download, Upload, Wi‑Fi, Mobile
   final List<Map<String, dynamic>> categories = [
     {'name': 'Download', 'icon': Icons.download, 'usage': 0.0},
     {'name': 'Upload', 'icon': Icons.upload, 'usage': 0.0},
-    {'name': 'Wi-Fi', 'icon': Icons.wifi, 'usage': 0.0},
+    {'name': 'Wi‑Fi', 'icon': Icons.wifi, 'usage': 0.0},
     {'name': 'Mobile', 'icon': Icons.cell_tower, 'usage': 0.0},
   ];
 
@@ -33,16 +33,24 @@ class _CircularDataChartState extends State<CircularDataChart> {
   @override
   void initState() {
     super.initState();
-    _loadAppUsage(); // Uygulama bazlı veriler
-    _loadDetailedUsage(); // Download, Upload, Wi-Fi, Mobile verileri
-    // Her 10 dakikada bir verileri güncelle (7 gün bazında)
-    _usageTimer = Timer.periodic(const Duration(minutes: 10), (_) {
-      _loadAppUsage();
+    _loadAppUsage();      // Uygulama bazlı verileri al
+    _loadDetailedUsage(); // Kategori verilerini al: Download, Upload, Wi‑Fi, Mobile
+    // Her 5 saniyede bir detaylı kullanım verilerini, her 15 saniyede bir uygulama verilerini güncelle
+    _usageTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       _loadDetailedUsage();
+      // Her 15 saniyede bir uygulama kullanım verilerini güncelle
+      if (timer.tick % 3 == 0) {
+        _loadAppUsage();
+      }
     });
   }
 
   Future<void> _loadAppUsage() async {
+    if (!mounted) return;
     try {
       final List<dynamic> result =
       await _appUsageChannel.invokeMethod('getAppUsage');
@@ -63,22 +71,27 @@ class _CircularDataChartState extends State<CircularDataChart> {
   }
 
   Future<void> _loadDetailedUsage() async {
+    if (!mounted) return;
     try {
       final Map<dynamic, dynamic> result =
       await _networkUsageChannel.invokeMethod('getDetailedNetworkUsage');
-      final double mobileRx = (result['mobileRx'] as num).toDouble();
-      final double mobileTx = (result['mobileTx'] as num).toDouble();
+      
+      // Toplam download ve upload değerlerini doğrudan al
+      final double totalRx = (result['totalRx'] as num).toDouble();
+      final double totalTx = (result['totalTx'] as num).toDouble();
       final double wifiRx = (result['wifiRx'] as num).toDouble();
       final double wifiTx = (result['wifiTx'] as num).toDouble();
+      final double mobileRx = (result['mobileRx'] as num).toDouble();
+      final double mobileTx = (result['mobileTx'] as num).toDouble();
 
       setState(() {
-        // Download: Toplam rx (Wi-Fi + Mobile)
-        categories[0]['usage'] = wifiRx + mobileRx;
-        // Upload: Toplam tx (Wi-Fi + Mobile)
-        categories[1]['usage'] = wifiTx + mobileTx;
-        // Wi-Fi total: rx + tx
+        // Download: Toplam download verisi
+        categories[0]['usage'] = totalRx;
+        // Upload: Toplam upload verisi
+        categories[1]['usage'] = totalTx;
+        // Wi‑Fi toplam: rx + tx
         categories[2]['usage'] = wifiRx + wifiTx;
-        // Mobile total: rx + tx
+        // Mobile toplam: rx + tx
         categories[3]['usage'] = mobileRx + mobileTx;
       });
     } catch (e) {
@@ -95,7 +108,6 @@ class _CircularDataChartState extends State<CircularDataChart> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
       backgroundColor: isDark ? Colors.grey[900] : Colors.white,
       body: apps.isEmpty
@@ -142,7 +154,7 @@ class _CircularDataChartState extends State<CircularDataChart> {
               ],
             ),
           ),
-          // Kategori satırı (Download, Upload, Wi-Fi, Mobile)
+          // Kategori satırı: Download, Upload, Wi‑Fi, Mobile
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: categories.map((category) {
@@ -235,11 +247,12 @@ class CircularChartPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
-    final paint = Paint()..style = PaintingStyle.stroke..strokeWidth = 25;
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 25;
 
     double startAngle = -90 * (3.14159 / 180);
     final total = segments.reduce((a, b) => a + b);
-
     for (int i = 0; i < segments.length; i++) {
       final sweepAngle = (segments[i] / total) * 2 * 3.14159;
       paint.color = i == selectedIndex ? colors[i] : colors[i].withOpacity(0.3);
