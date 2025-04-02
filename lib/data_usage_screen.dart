@@ -171,7 +171,8 @@ class _DataUsageScreenState extends State<DataUsageScreen> {
             label: " ",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
+            icon: Icon(Icons.settings
+            ),
             label: " ",
           ),
         ],
