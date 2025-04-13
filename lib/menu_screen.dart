@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rorusheild2/feedback_screen.dart';
 import 'package:rorusheild2/help_screen.dart';
 import 'package:rorusheild2/services/notification_service.dart';
+import 'package:rorusheild2/services/pdf_report_service.dart';
 import 'package:rorusheild2/share_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/services.dart';
 
 class MenuScreen extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -16,6 +19,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
   bool notificationsEnabled = true;
+  static const platform = MethodChannel('com.example.rorusheild2/storage_permission');
 
   @override
   void initState() {
@@ -49,6 +53,76 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
         notificationsEnabled = hasPermission;
         NotificationService.instance.notificationsAllowed = hasPermission;
       });
+    }
+  }
+
+  Future<void> _downloadThreatReport() async {
+    try {
+      // Depolama izni kontrolü
+      final status = await Permission.storage.status;
+      if (status.isDenied) {
+        final result = await Permission.storage.request();
+        if (!result.isGranted) {
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Depolama İzni Gerekli'),
+                  content: const Text(
+                      'Rapor oluşturmak için depolama izni gereklidir. Lütfen ayarlardan izin verin.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('İptal'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        try {
+                          await platform.invokeMethod('openStorageSettings');
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Ayarlar açılamadı: $e'),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: const Text('Ayarları Aç'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+          return;
+        }
+      }
+
+      // Yükleniyor göstergesi
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Rapor hazırlanıyor...')),
+        );
+      }
+
+      // Raporu oluştur
+      final path = await PdfReportService.instance.generateThreatReport();
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Rapor Download klasörüne kaydedildi: ${path.split('/').last}')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Hata oluştu: $e')),
+        );
+      }
     }
   }
 
@@ -155,16 +229,21 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
                   MaterialPageRoute(builder: (context) => const ShareScreen()),
                 );
               }),
-              buildMenuItem(context, Icons.feedback_outlined, "Geri Bildirim Gönder", () {
+              buildMenuItem(context, Icons.feedback_outlined, "Geribildirim Gönder", () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const FeedbackScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const FeedbackScreen(),
+                  ),
                 );
               }),
+              buildMenuItem(context, Icons.analytics_outlined, "Tehdit Analizi Raporu", _downloadThreatReport),
+              const SizedBox(height: 10),
               const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Light Mode Butonu
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isDark ? Colors.white : Colors.blue,
@@ -172,20 +251,30 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: widget.toggleTheme,
-                    child: Icon(Icons.light_mode,
-                        color: isDark ? Colors.black : Colors.white),
+                    // Dark modda iken aktif, Light modda pasif
+                    onPressed: isDark ? widget.toggleTheme : null,
+                    child: Icon(
+                      Icons.light_mode,
+                      color: isDark ? Colors.black : Colors.grey.shade400,
+                    ),
                   ),
                   const SizedBox(width: 20),
+                  // Dark Mode Butonu
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.blue),
+                      side: BorderSide(
+                        color: !isDark ? Colors.blue : Colors.grey.shade400,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: widget.toggleTheme,
-                    child: const Icon(Icons.dark_mode, color: Colors.blue),
+                    // Light modda iken aktif, Dark modda pasif
+                    onPressed: !isDark ? widget.toggleTheme : null,
+                    child: Icon(
+                      Icons.dark_mode,
+                      color: !isDark ? Colors.blue : Colors.grey.shade400,
+                    ),
                   ),
                 ],
               ),

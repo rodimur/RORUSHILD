@@ -1,0 +1,992 @@
+diff --git a/.flutter-plugins b/.flutter-plugins
+index 9565b1f..179a383 100644
+--- a/.flutter-plugins
++++ b/.flutter-plugins
+@@ -1,31 +1,32 @@
+ # This is a generated file; do not edit or check into version control.
+-flutter_local_notifications=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_local_notifications-19.0.0\\
+-flutter_local_notifications_linux=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_local_notifications_linux-6.0.0\\
+-flutter_local_notifications_windows=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_local_notifications_windows-1.0.0\\
+-path_provider=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider-2.1.5\\
+-path_provider_android=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_android-2.2.16\\
+-path_provider_foundation=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_foundation-2.4.1\\
+-path_provider_linux=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_linux-2.2.1\\
+-path_provider_windows=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_windows-2.3.0\\
+-permission_handler=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\permission_handler-11.4.0\\
+-permission_handler_android=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\permission_handler_android-12.1.0\\
+-permission_handler_apple=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\permission_handler_apple-9.4.6\\
+-permission_handler_html=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\permission_handler_html-0.1.3+5\\
+-permission_handler_windows=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\permission_handler_windows-0.2.1\\
+-share_plus=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\share_plus-7.2.2\\
+-shared_preferences=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\shared_preferences-2.5.3\\
+-shared_preferences_android=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\shared_preferences_android-2.4.8\\
+-shared_preferences_foundation=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\shared_preferences_foundation-2.5.4\\
+-shared_preferences_linux=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\shared_preferences_linux-2.4.1\\
+-shared_preferences_web=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\shared_preferences_web-2.4.3\\
+-shared_preferences_windows=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\shared_preferences_windows-2.4.1\\
+-sqflite=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\sqflite-2.4.1\\
+-sqflite_android=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\sqflite_android-2.4.0\\
+-sqflite_darwin=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\sqflite_darwin-2.4.1+1\\
+-url_launcher=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\url_launcher-6.3.1\\
+-url_launcher_android=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\url_launcher_android-6.3.15\\
+-url_launcher_ios=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\url_launcher_ios-6.3.2\\
+-url_launcher_linux=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\url_launcher_linux-3.2.1\\
+-url_launcher_macos=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\url_launcher_macos-3.2.2\\
+-url_launcher_web=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\url_launcher_web-2.4.0\\
+-url_launcher_windows=C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\url_launcher_windows-3.1.4\\
++flutter_local_notifications=/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications-19.0.0/
++flutter_local_notifications_linux=/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications_linux-6.0.0/
++flutter_local_notifications_windows=/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications_windows-1.0.0/
++path_provider=/Users/rodi/.pub-cache/hosted/pub.dev/path_provider-2.1.5/
++path_provider_android=/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_android-2.2.16/
++path_provider_foundation=/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1/
++path_provider_linux=/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
++path_provider_windows=/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_windows-2.3.0/
++permission_handler=/Users/rodi/.pub-cache/hosted/pub.dev/permission_handler-11.4.0/
++permission_handler_android=/Users/rodi/.pub-cache/hosted/pub.dev/permission_handler_android-12.1.0/
++permission_handler_apple=/Users/rodi/.pub-cache/hosted/pub.dev/permission_handler_apple-9.4.6/
++permission_handler_html=/Users/rodi/.pub-cache/hosted/pub.dev/permission_handler_html-0.1.3+5/
++permission_handler_windows=/Users/rodi/.pub-cache/hosted/pub.dev/permission_handler_windows-0.2.1/
++printing=/Users/rodi/.pub-cache/hosted/pub.dev/printing-5.14.2/
++share_plus=/Users/rodi/.pub-cache/hosted/pub.dev/share_plus-7.2.2/
++shared_preferences=/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences-2.5.3/
++shared_preferences_android=/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.8/
++shared_preferences_foundation=/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.5.4/
++shared_preferences_linux=/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.4.1/
++shared_preferences_web=/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_web-2.4.3/
++shared_preferences_windows=/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.4.1/
++sqflite=/Users/rodi/.pub-cache/hosted/pub.dev/sqflite-2.4.2/
++sqflite_android=/Users/rodi/.pub-cache/hosted/pub.dev/sqflite_android-2.4.1/
++sqflite_darwin=/Users/rodi/.pub-cache/hosted/pub.dev/sqflite_darwin-2.4.2/
++url_launcher=/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher-6.3.1/
++url_launcher_android=/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.15/
++url_launcher_ios=/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_ios-6.3.3/
++url_launcher_linux=/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_linux-3.2.1/
++url_launcher_macos=/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.2/
++url_launcher_web=/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_web-2.4.0/
++url_launcher_windows=/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.4/
+diff --git a/.flutter-plugins-dependencies b/.flutter-plugins-dependencies
+index 4998782..4a07691 100644
+--- a/.flutter-plugins-dependencies
++++ b/.flutter-plugins-dependencies
+@@ -1,88 +1 @@
+-{
+-
+-  "info": "This is a generated file; do not edit or check into version control.",
+-
+-  "plugins": {
+-
+-    "ios": [
+-
+-      {
+-
+-        "name": "flutter_local_notifications",
+-
+-        "path": "C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_local_notifications-19.0.0\\",
+-
+-        "native_build": true,
+-
+-        "dependencies": []
+-
+-      },
+-
+-      {
+-
+-        "name": "path_provider_foundation",
+-
+-        "path": "C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_foundation-2.4.1\\",
+-
+-        "shared_darwin_source": true,
+-
+-        "native_build": true,
+-
+-        "dependencies": []
+-
+-      },
+-
+-      ...
+-
+-    ],
+-
+-    "android": [
+-
+-      {
+-
+-        "name": "flutter_local_notifications",
+-
+-        "path": "C:\\Users\\LENOVO\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_local_notifications-19.0.0\\",
+-
+-        "native_build": true,
+-
+-        "dependencies": []
+-
+-      },
+-
+-      ...
+-
+-    ],
+-
+-    ...
+-
+-  },
+-
+-  "dependencyGraph": [
+-
+-    {
+-
+-      "name": "flutter_local_notifications",
+-
+-      "dependencies": [
+-
+-        "flutter_local_notifications_linux",
+-
+-        "flutter_local_notifications_windows"
+-
+-      ]
+-
+-    },
+-
+-    ...
+-
+-  ],
+-
+-  "date_created": "2025-04-02 17:29:56.132608",
+-
+-  "version": "3.27.1",
+-
+-  "swift_package_manager_enabled": false
+-
+-}
+-
++{"info":"This is a generated file; do not edit or check into version control.","plugins":{"ios":[{"name":"flutter_local_notifications","path":"/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications-19.0.0/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"path_provider_foundation","path":"/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1/","shared_darwin_source":true,"native_build":true,"dependencies":[],"dev_dependency":false},{"name":"permission_handler_apple","path":"/Users/rodi/.pub-cache/hosted/pub.dev/permission_handler_apple-9.4.6/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"printing","path":"/Users/rodi/.pub-cache/hosted/pub.dev/printing-5.14.2/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"share_plus","path":"/Users/rodi/.pub-cache/hosted/pub.dev/share_plus-7.2.2/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"shared_preferences_foundation","path":"/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.5.4/","shared_darwin_source":true,"native_build":true,"dependencies":[],"dev_dependency":false},{"name":"sqflite_darwin","path":"/Users/rodi/.pub-cache/hosted/pub.dev/sqflite_darwin-2.4.2/","shared_darwin_source":true,"native_build":true,"dependencies":[],"dev_dependency":false},{"name":"url_launcher_ios","path":"/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_ios-6.3.3/","native_build":true,"dependencies":[],"dev_dependency":false}],"android":[{"name":"flutter_local_notifications","path":"/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications-19.0.0/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"path_provider_android","path":"/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_android-2.2.16/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"permission_handler_android","path":"/Users/rodi/.pub-cache/hosted/pub.dev/permission_handler_android-12.1.0/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"printing","path":"/Users/rodi/.pub-cache/hosted/pub.dev/printing-5.14.2/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"share_plus","path":"/Users/rodi/.pub-cache/hosted/pub.dev/share_plus-7.2.2/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"shared_preferences_android","path":"/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.8/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"sqflite_android","path":"/Users/rodi/.pub-cache/hosted/pub.dev/sqflite_android-2.4.1/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"url_launcher_android","path":"/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_android-6.3.15/","native_build":true,"dependencies":[],"dev_dependency":false}],"macos":[{"name":"flutter_local_notifications","path":"/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications-19.0.0/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"path_provider_foundation","path":"/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1/","shared_darwin_source":true,"native_build":true,"dependencies":[],"dev_dependency":false},{"name":"printing","path":"/Users/rodi/.pub-cache/hosted/pub.dev/printing-5.14.2/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"share_plus","path":"/Users/rodi/.pub-cache/hosted/pub.dev/share_plus-7.2.2/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"shared_preferences_foundation","path":"/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.5.4/","shared_darwin_source":true,"native_build":true,"dependencies":[],"dev_dependency":false},{"name":"sqflite_darwin","path":"/Users/rodi/.pub-cache/hosted/pub.dev/sqflite_darwin-2.4.2/","shared_darwin_source":true,"native_build":true,"dependencies":[],"dev_dependency":false},{"name":"url_launcher_macos","path":"/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.2/","native_build":true,"dependencies":[],"dev_dependency":false}],"linux":[{"name":"flutter_local_notifications_linux","path":"/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications_linux-6.0.0/","native_build":false,"dependencies":[],"dev_dependency":false},{"name":"path_provider_linux","path":"/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/","native_build":false,"dependencies":[],"dev_dependency":false},{"name":"printing","path":"/Users/rodi/.pub-cache/hosted/pub.dev/printing-5.14.2/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"share_plus","path":"/Users/rodi/.pub-cache/hosted/pub.dev/share_plus-7.2.2/","native_build":false,"dependencies":["url_launcher_linux"],"dev_dependency":false},{"name":"shared_preferences_linux","path":"/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.4.1/","native_build":false,"dependencies":["path_provider_linux"],"dev_dependency":false},{"name":"url_launcher_linux","path":"/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_linux-3.2.1/","native_build":true,"dependencies":[],"dev_dependency":false}],"windows":[{"name":"flutter_local_notifications_windows","path":"/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications_windows-1.0.0/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"path_provider_windows","path":"/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_windows-2.3.0/","native_build":false,"dependencies":[],"dev_dependency":false},{"name":"permission_handler_windows","path":"/Users/rodi/.pub-cache/hosted/pub.dev/permission_handler_windows-0.2.1/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"printing","path":"/Users/rodi/.pub-cache/hosted/pub.dev/printing-5.14.2/","native_build":true,"dependencies":[],"dev_dependency":false},{"name":"share_plus","path":"/Users/rodi/.pub-cache/hosted/pub.dev/share_plus-7.2.2/","native_build":true,"dependencies":["url_launcher_windows"],"dev_dependency":false},{"name":"shared_preferences_windows","path":"/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.4.1/","native_build":false,"dependencies":["path_provider_windows"],"dev_dependency":false},{"name":"url_launcher_windows","path":"/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.4/","native_build":true,"dependencies":[],"dev_dependency":false}],"web":[{"name":"permission_handler_html","path":"/Users/rodi/.pub-cache/hosted/pub.dev/permission_handler_html-0.1.3+5/","dependencies":[],"dev_dependency":false},{"name":"printing","path":"/Users/rodi/.pub-cache/hosted/pub.dev/printing-5.14.2/","dependencies":[],"dev_dependency":false},{"name":"share_plus","path":"/Users/rodi/.pub-cache/hosted/pub.dev/share_plus-7.2.2/","dependencies":["url_launcher_web"],"dev_dependency":false},{"name":"shared_preferences_web","path":"/Users/rodi/.pub-cache/hosted/pub.dev/shared_preferences_web-2.4.3/","dependencies":[],"dev_dependency":false},{"name":"url_launcher_web","path":"/Users/rodi/.pub-cache/hosted/pub.dev/url_launcher_web-2.4.0/","dependencies":[],"dev_dependency":false}]},"dependencyGraph":[{"name":"flutter_local_notifications","dependencies":["flutter_local_notifications_linux","flutter_local_notifications_windows"]},{"name":"flutter_local_notifications_linux","dependencies":[]},{"name":"flutter_local_notifications_windows","dependencies":[]},{"name":"path_provider","dependencies":["path_provider_android","path_provider_foundation","path_provider_linux","path_provider_windows"]},{"name":"path_provider_android","dependencies":[]},{"name":"path_provider_foundation","dependencies":[]},{"name":"path_provider_linux","dependencies":[]},{"name":"path_provider_windows","dependencies":[]},{"name":"permission_handler","dependencies":["permission_handler_android","permission_handler_apple","permission_handler_html","permission_handler_windows"]},{"name":"permission_handler_android","dependencies":[]},{"name":"permission_handler_apple","dependencies":[]},{"name":"permission_handler_html","dependencies":[]},{"name":"permission_handler_windows","dependencies":[]},{"name":"printing","dependencies":[]},{"name":"share_plus","dependencies":["url_launcher_web","url_launcher_windows","url_launcher_linux"]},{"name":"shared_preferences","dependencies":["shared_preferences_android","shared_preferences_foundation","shared_preferences_linux","shared_preferences_web","shared_preferences_windows"]},{"name":"shared_preferences_android","dependencies":[]},{"name":"shared_preferences_foundation","dependencies":[]},{"name":"shared_preferences_linux","dependencies":["path_provider_linux"]},{"name":"shared_preferences_web","dependencies":[]},{"name":"shared_preferences_windows","dependencies":["path_provider_windows"]},{"name":"sqflite","dependencies":["sqflite_android","sqflite_darwin"]},{"name":"sqflite_android","dependencies":[]},{"name":"sqflite_darwin","dependencies":[]},{"name":"url_launcher","dependencies":["url_launcher_android","url_launcher_ios","url_launcher_linux","url_launcher_macos","url_launcher_web","url_launcher_windows"]},{"name":"url_launcher_android","dependencies":[]},{"name":"url_launcher_ios","dependencies":[]},{"name":"url_launcher_linux","dependencies":[]},{"name":"url_launcher_macos","dependencies":[]},{"name":"url_launcher_web","dependencies":[]},{"name":"url_launcher_windows","dependencies":[]}],"date_created":"2025-04-13 14:10:29.165007","version":"3.29.2","swift_package_manager_enabled":{"ios":false,"macos":false}}
+\ No newline at end of file
+diff --git a/android/app/.cxx/Debug/554k1373/arm64-v8a/configure_fingerprint.bin b/android/app/.cxx/Debug/554k1373/arm64-v8a/configure_fingerprint.bin
+index 5a4dc2e..de6d2ff 100644
+--- a/android/app/.cxx/Debug/554k1373/arm64-v8a/configure_fingerprint.bin
++++ b/android/app/.cxx/Debug/554k1373/arm64-v8a/configure_fingerprint.bin
+@@ -2,27 +2,27 @@ C/C++ Structured Logw
+ u
+ s/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/additional_project_files.txtC
+ A
+-?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	À°Èôﬂ2 Ω‚ê£ﬁ2t
++?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	í›‡ˆ‚2 Ω‚ê£ﬁ2t
+ r
+-p/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/android_gradle_build.json	À°Èôﬂ2Ì æ‚ê£ﬁ2y
++p/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/android_gradle_build.json	í›‡ˆ‚2Ì æ‚ê£ﬁ2y
+ w
+-u/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/android_gradle_build_mini.json	À°Èôﬂ2¯ æ‚ê£ﬁ2f
++u/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/android_gradle_build_mini.json	í›‡ˆ‚2¯ æ‚ê£ﬁ2f
+ d
+-b/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/build.ninja	À°Èôﬂ2à≈ µ‚ê£ﬁ2j
++b/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/build.ninja	í›‡ˆ‚2à≈ µ‚ê£ﬁ2j
+ h
+-f/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/build.ninja.txt	À°Èôﬂ2o
++f/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/build.ninja.txt	í›‡ˆ‚2o
+ m
+-k/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/build_file_index.txt	À°Èôﬂ2j ø‚ê£ﬁ2p
++k/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/build_file_index.txt	í›‡ˆ‚2j ø‚ê£ﬁ2p
+ n
+-l/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/compile_commands.json	À°Èôﬂ2t
++l/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/compile_commands.json	í›‡ˆ‚2t
+ r
+-p/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/compile_commands.json.bin	À°Èôﬂ2	z
++p/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/compile_commands.json.bin	í›‡ˆ‚2	z
+ x
+-v/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/metadata_generation_command.txt	À°Èôﬂ2
++v/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/metadata_generation_command.txt	í›‡ˆ‚2
+ ﬁ æ‚ê£ﬁ2m
+ k
+-i/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/prefab_config.json	À°Èôﬂ2( æ‚ê£ﬁ2r
++i/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/prefab_config.json	í›‡ˆ‚2( æ‚ê£ﬁ2r
+ p
+-n/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/symbol_folder_index.txt	Ã°Èôﬂ2e ø‚ê£ﬁ2n
++n/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/arm64-v8a/symbol_folder_index.txt	í›‡ˆ‚2e ø‚ê£ﬁ2n
+ l
+-j/opt/homebrew/Caskroom/flutter/3.29.2/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	Ã°Èôﬂ2§ Ä‡•äŸ2
+\ No newline at end of file
++j/opt/homebrew/Caskroom/flutter/3.29.2/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	í›‡ˆ‚2§ Ä‡•äŸ2
+\ No newline at end of file
+diff --git a/android/app/.cxx/Debug/554k1373/armeabi-v7a/configure_fingerprint.bin b/android/app/.cxx/Debug/554k1373/armeabi-v7a/configure_fingerprint.bin
+index 998dcc0..1537a2a 100644
+--- a/android/app/.cxx/Debug/554k1373/armeabi-v7a/configure_fingerprint.bin
++++ b/android/app/.cxx/Debug/554k1373/armeabi-v7a/configure_fingerprint.bin
+@@ -2,27 +2,27 @@ C/C++ Structured Logy
+ w
+ u/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/additional_project_files.txtC
+ A
+-?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	Ú°Èôﬂ2 ÆÂê£ﬁ2v
++?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	ú›‡ˆ‚2 ÆÂê£ﬁ2v
+ t
+-r/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/android_gradle_build.json	Ú°Èôﬂ2Ò ØÂê£ﬁ2{
++r/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/android_gradle_build.json	ú›‡ˆ‚2Ò ØÂê£ﬁ2{
+ y
+-w/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/android_gradle_build_mini.json	Ú°Èôﬂ2¸ ØÂê£ﬁ2h
++w/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/android_gradle_build_mini.json	ú›‡ˆ‚2¸ ØÂê£ﬁ2h
+ f
+-d/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/build.ninja	Ú°Èôﬂ2î≈ ßÂê£ﬁ2l
++d/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/build.ninja	ú›‡ˆ‚2î≈ ßÂê£ﬁ2l
+ j
+-h/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/build.ninja.txt	Ú°Èôﬂ2q
++h/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/build.ninja.txt	ú›‡ˆ‚2q
+ o
+-m/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/build_file_index.txt	Ú°Èôﬂ2j ØÂê£ﬁ2r
++m/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/build_file_index.txt	ú›‡ˆ‚2j ØÂê£ﬁ2r
+ p
+-n/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/compile_commands.json	Ú°Èôﬂ2v
++n/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/compile_commands.json	ù›‡ˆ‚2v
+ t
+-r/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/compile_commands.json.bin	Ú°Èôﬂ2	|
++r/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/compile_commands.json.bin	ù›‡ˆ‚2	|
+ z
+-x/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/metadata_generation_command.txt	Ú°Èôﬂ2
++x/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/metadata_generation_command.txt	ù›‡ˆ‚2
+ Ë ØÂê£ﬁ2o
+ m
+-k/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/prefab_config.json	Ú°Èôﬂ2( ØÂê£ﬁ2t
++k/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/prefab_config.json	ù›‡ˆ‚2( ØÂê£ﬁ2t
+ r
+-p/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/symbol_folder_index.txt	Ú°Èôﬂ2g ØÂê£ﬁ2n
++p/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/armeabi-v7a/symbol_folder_index.txt	ù›‡ˆ‚2g ØÂê£ﬁ2n
+ l
+-j/opt/homebrew/Caskroom/flutter/3.29.2/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	Ú°Èôﬂ2§ Ä‡•äŸ2
+\ No newline at end of file
++j/opt/homebrew/Caskroom/flutter/3.29.2/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	ù›‡ˆ‚2§ Ä‡•äŸ2
+\ No newline at end of file
+diff --git a/android/app/.cxx/Debug/554k1373/x86/configure_fingerprint.bin b/android/app/.cxx/Debug/554k1373/x86/configure_fingerprint.bin
+index 6b2ae8c..43dd8a2 100644
+--- a/android/app/.cxx/Debug/554k1373/x86/configure_fingerprint.bin
++++ b/android/app/.cxx/Debug/554k1373/x86/configure_fingerprint.bin
+@@ -2,27 +2,27 @@ C/C++ Structured Logq
+ o
+ m/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/additional_project_files.txtC
+ A
+-?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	˝°Èôﬂ2 √Áê£ﬁ2n
++?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	ﬂﬂ‡ˆ‚2 √Áê£ﬁ2n
+ l
+-j/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/android_gradle_build.json	˝°Èôﬂ2· √Áê£ﬁ2s
++j/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/android_gradle_build.json	ﬂﬂ‡ˆ‚2· √Áê£ﬁ2s
+ q
+-o/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/android_gradle_build_mini.json	˝°Èôﬂ2Ï ƒÁê£ﬁ2`
++o/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/android_gradle_build_mini.json	ﬂﬂ‡ˆ‚2Ï ƒÁê£ﬁ2`
+ ^
+-\/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/build.ninja	˝°Èôﬂ2‰ƒ ªÁê£ﬁ2d
++\/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/build.ninja	ﬂﬂ‡ˆ‚2‰ƒ ªÁê£ﬁ2d
+ b
+-`/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/build.ninja.txt	˝°Èôﬂ2i
++`/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/build.ninja.txt	ﬂﬂ‡ˆ‚2i
+ g
+-e/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/build_file_index.txt	˝°Èôﬂ2j ƒÁê£ﬁ2j
++e/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/build_file_index.txt	ﬂﬂ‡ˆ‚2j ƒÁê£ﬁ2j
+ h
+-f/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/compile_commands.json	˝°Èôﬂ2n
++f/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/compile_commands.json	ﬂﬂ‡ˆ‚2n
+ l
+-j/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/compile_commands.json.bin	˝°Èôﬂ2	t
++j/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/compile_commands.json.bin	ﬂﬂ‡ˆ‚2	t
+ r
+-p/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/metadata_generation_command.txt	˝°Èôﬂ2
++p/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/metadata_generation_command.txt	ﬂﬂ‡ˆ‚2
+ ¿ ƒÁê£ﬁ2g
+ e
+-c/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/prefab_config.json	˛°Èôﬂ2( ƒÁê£ﬁ2l
++c/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/prefab_config.json	ﬂﬂ‡ˆ‚2( ƒÁê£ﬁ2l
+ j
+-h/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/symbol_folder_index.txt	˛°Èôﬂ2_ ƒÁê£ﬁ2n
++h/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86/symbol_folder_index.txt	ﬂﬂ‡ˆ‚2_ ƒÁê£ﬁ2n
+ l
+-j/opt/homebrew/Caskroom/flutter/3.29.2/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	˛°Èôﬂ2§ Ä‡•äŸ2
+\ No newline at end of file
++j/opt/homebrew/Caskroom/flutter/3.29.2/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	ﬂﬂ‡ˆ‚2§ Ä‡•äŸ2
+\ No newline at end of file
+diff --git a/android/app/.cxx/Debug/554k1373/x86_64/configure_fingerprint.bin b/android/app/.cxx/Debug/554k1373/x86_64/configure_fingerprint.bin
+index c3e40af..7ebd236 100644
+--- a/android/app/.cxx/Debug/554k1373/x86_64/configure_fingerprint.bin
++++ b/android/app/.cxx/Debug/554k1373/x86_64/configure_fingerprint.bin
+@@ -2,27 +2,27 @@ C/C++ Structured Logt
+ r
+ p/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/additional_project_files.txtC
+ A
+-?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	—¢Èôﬂ2 ÕÈê£ﬁ2q
++?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	Óﬂ‡ˆ‚2 ÕÈê£ﬁ2q
+ o
+-m/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/android_gradle_build.json	—¢Èôﬂ2Á ŒÈê£ﬁ2v
++m/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/android_gradle_build.json	Óﬂ‡ˆ‚2Á ŒÈê£ﬁ2v
+ t
+-r/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/android_gradle_build_mini.json	—¢Èôﬂ2Ú ŒÈê£ﬁ2c
++r/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/android_gradle_build_mini.json	Óﬂ‡ˆ‚2Ú ŒÈê£ﬁ2c
+ a
+-_/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/build.ninja	—¢Èôﬂ2ˆƒ ∆Èê£ﬁ2g
++_/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/build.ninja	Óﬂ‡ˆ‚2ˆƒ ∆Èê£ﬁ2g
+ e
+-c/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/build.ninja.txt	—¢Èôﬂ2l
++c/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/build.ninja.txt	Óﬂ‡ˆ‚2l
+ j
+-h/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/build_file_index.txt	—¢Èôﬂ2j œÈê£ﬁ2m
++h/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/build_file_index.txt	Óﬂ‡ˆ‚2j œÈê£ﬁ2m
+ k
+-i/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/compile_commands.json	—¢Èôﬂ2q
++i/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/compile_commands.json	Óﬂ‡ˆ‚2q
+ o
+-m/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/compile_commands.json.bin	—¢Èôﬂ2	w
++m/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/compile_commands.json.bin	Óﬂ‡ˆ‚2	w
+ u
+-s/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/metadata_generation_command.txt	—¢Èôﬂ2
++s/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/metadata_generation_command.txt	Óﬂ‡ˆ‚2
+ œ ŒÈê£ﬁ2j
+ h
+-f/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/prefab_config.json	—¢Èôﬂ2( ŒÈê£ﬁ2o
++f/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/prefab_config.json	Óﬂ‡ˆ‚2( ŒÈê£ﬁ2o
+ m
+-k/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/symbol_folder_index.txt	—¢Èôﬂ2b ŒÈê£ﬁ2n
++k/Users/rodi/Desktop/bitirmeprojesi/RORUSHILD/android/app/.cxx/Debug/554k1373/x86_64/symbol_folder_index.txt	Óﬂ‡ˆ‚2b ŒÈê£ﬁ2n
+ l
+-j/opt/homebrew/Caskroom/flutter/3.29.2/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	—¢Èôﬂ2§ Ä‡•äŸ2
+\ No newline at end of file
++j/opt/homebrew/Caskroom/flutter/3.29.2/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt	Óﬂ‡ˆ‚2§ Ä‡•äŸ2
+\ No newline at end of file
+diff --git a/android/app/src/main/AndroidManifest.xml b/android/app/src/main/AndroidManifest.xml
+index 454e957..8ab0b8e 100644
+--- a/android/app/src/main/AndroidManifest.xml
++++ b/android/app/src/main/AndroidManifest.xml
+@@ -8,6 +8,7 @@
+     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"/>
++    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
+     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+diff --git a/android/app/src/main/kotlin/com/example/rorusheild2/MainActivity.kt b/android/app/src/main/kotlin/com/example/rorusheild2/MainActivity.kt
+index 2ab90d8..2f53bd0 100644
+--- a/android/app/src/main/kotlin/com/example/rorusheild2/MainActivity.kt
++++ b/android/app/src/main/kotlin/com/example/rorusheild2/MainActivity.kt
+@@ -16,6 +16,7 @@ import android.view.accessibility.AccessibilityManager
+ import android.accessibilityservice.AccessibilityServiceInfo
+ import android.content.pm.ApplicationInfo
+ import android.content.pm.PackageManager
++import android.os.Environment
+ import io.flutter.embedding.android.FlutterActivity
+ import io.flutter.embedding.engine.FlutterEngine
+ import io.flutter.plugin.common.EventChannel
+@@ -47,6 +48,28 @@ class MainActivity : FlutterActivity() {
+     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+         super.configureFlutterEngine(flutterEngine)
+ 
++        // Depolama izni y√∂netimi i√ßin yeni metot √ßaƒürƒ±sƒ±
++        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.example.rorusheild2/storage_permission").setMethodCallHandler { call, result ->
++            when (call.method) {
++                "openStorageSettings" -> {
++                    try {
++                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
++                        intent.data = android.net.Uri.parse("package:${applicationContext.packageName}")
++                        startActivity(intent)
++                        result.success(true)
++                    } catch (e: Exception) {
++                        result.error("UNAVAILABLE", "Ayarlar a√ßƒ±lamadƒ±", null)
++                    }
++                }
++                "checkStoragePermission" -> {
++                    val readPermission = checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
++                    val writePermission = checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
++                    result.success(readPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED)
++                }
++                else -> result.notImplemented()
++            }
++        }
++
+         // VPN ile ilgili kanal
+         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.example.rorusheild2/vpn_channel")
+         channel.setMethodCallHandler { call, result ->
+diff --git a/lib/menu_screen.dart b/lib/menu_screen.dart
+index 4a48523..55a2e8d 100644
+--- a/lib/menu_screen.dart
++++ b/lib/menu_screen.dart
+@@ -1,9 +1,12 @@
+ import 'package:flutter/material.dart';
++import 'package:flutter/services.dart';
+ import 'package:rorusheild2/feedback_screen.dart';
+ import 'package:rorusheild2/help_screen.dart';
+ import 'package:rorusheild2/services/notification_service.dart';
++import 'package:rorusheild2/services/pdf_report_service.dart';
+ import 'package:rorusheild2/share_screen.dart';
+ import 'package:permission_handler/permission_handler.dart';
++import 'package:flutter/services.dart';
+ 
+ class MenuScreen extends StatefulWidget {
+   final VoidCallback toggleTheme;
+@@ -16,6 +19,7 @@ class MenuScreen extends StatefulWidget {
+ 
+ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
+   bool notificationsEnabled = true;
++  static const platform = MethodChannel('com.example.rorusheild2/storage_permission');
+ 
+   @override
+   void initState() {
+@@ -52,6 +56,76 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
+     }
+   }
+ 
++  Future<void> _downloadThreatReport() async {
++    try {
++      // Depolama izni kontrol√º
++      final status = await Permission.storage.status;
++      if (status.isDenied) {
++        final result = await Permission.storage.request();
++        if (!result.isGranted) {
++          if (mounted) {
++            showDialog(
++              context: context,
++              builder: (BuildContext context) {
++                return AlertDialog(
++                  title: const Text('Depolama ƒ∞zni Gerekli'),
++                  content: const Text(
++                      'Rapor olu≈üturmak i√ßin depolama izni gereklidir. L√ºtfen ayarlardan izin verin.'),
++                  actions: [
++                    TextButton(
++                      onPressed: () => Navigator.of(context).pop(),
++                      child: const Text('ƒ∞ptal'),
++                    ),
++                    TextButton(
++                      onPressed: () async {
++                        Navigator.of(context).pop();
++                        try {
++                          await platform.invokeMethod('openStorageSettings');
++                        } catch (e) {
++                          if (mounted) {
++                            ScaffoldMessenger.of(context).showSnackBar(
++                              SnackBar(
++                                content: Text('Ayarlar a√ßƒ±lamadƒ±: $e'),
++                              ),
++                            );
++                          }
++                        }
++                      },
++                      child: const Text('Ayarlarƒ± A√ß'),
++                    ),
++                  ],
++                );
++              },
++            );
++          }
++          return;
++        }
++      }
++
++      // Y√ºkleniyor g√∂stergesi
++      if (mounted) {
++        ScaffoldMessenger.of(context).showSnackBar(
++          const SnackBar(content: Text('Rapor hazƒ±rlanƒ±yor...')),
++        );
++      }
++
++      // Raporu olu≈ütur
++      final path = await PdfReportService.instance.generateThreatReport();
++      
++      if (mounted) {
++        ScaffoldMessenger.of(context).showSnackBar(
++          SnackBar(content: Text('Rapor Download klas√∂r√ºne kaydedildi: ${path.split('/').last}')),
++        );
++      }
++    } catch (e) {
++      if (mounted) {
++        ScaffoldMessenger.of(context).showSnackBar(
++          SnackBar(content: Text('Hata olu≈ütu: $e')),
++        );
++      }
++    }
++  }
++
+   // üëá Sistem bildirim ayarlarƒ±na y√∂nlendir
+   Future<void> _openNotificationSettings() async {
+     await openAppSettings();
+@@ -155,16 +229,21 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
+                   MaterialPageRoute(builder: (context) => const ShareScreen()),
+                 );
+               }),
+-              buildMenuItem(context, Icons.feedback_outlined, "Geri Bildirim G√∂nder", () {
++              buildMenuItem(context, Icons.feedback_outlined, "Geribildirim G√∂nder", () {
+                 Navigator.push(
+                   context,
+-                  MaterialPageRoute(builder: (context) => const FeedbackScreen()),
++                  MaterialPageRoute(
++                    builder: (context) => const FeedbackScreen(),
++                  ),
+                 );
+               }),
++              buildMenuItem(context, Icons.analytics_outlined, "Tehdit Analizi Raporu", _downloadThreatReport),
++              const SizedBox(height: 10),
+               const Spacer(),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
++                  // Light Mode Butonu
+                   ElevatedButton(
+                     style: ElevatedButton.styleFrom(
+                       backgroundColor: isDark ? Colors.white : Colors.blue,
+@@ -172,20 +251,30 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
+                         borderRadius: BorderRadius.circular(12),
+                       ),
+                     ),
+-                    onPressed: widget.toggleTheme,
+-                    child: Icon(Icons.light_mode,
+-                        color: isDark ? Colors.black : Colors.white),
++                    // Dark modda iken aktif, Light modda pasif
++                    onPressed: isDark ? widget.toggleTheme : null,
++                    child: Icon(
++                      Icons.light_mode,
++                      color: isDark ? Colors.black : Colors.grey.shade400,
++                    ),
+                   ),
+                   const SizedBox(width: 20),
++                  // Dark Mode Butonu
+                   OutlinedButton(
+                     style: OutlinedButton.styleFrom(
+-                      side: const BorderSide(color: Colors.blue),
++                      side: BorderSide(
++                        color: !isDark ? Colors.blue : Colors.grey.shade400,
++                      ),
+                       shape: RoundedRectangleBorder(
+                         borderRadius: BorderRadius.circular(12),
+                       ),
+                     ),
+-                    onPressed: widget.toggleTheme,
+-                    child: const Icon(Icons.dark_mode, color: Colors.blue),
++                    // Light modda iken aktif, Dark modda pasif
++                    onPressed: !isDark ? widget.toggleTheme : null,
++                    child: Icon(
++                      Icons.dark_mode,
++                      color: !isDark ? Colors.blue : Colors.grey.shade400,
++                    ),
+                   ),
+                 ],
+               ),
+diff --git a/lib/services/pdf_report_service.dart b/lib/services/pdf_report_service.dart
+new file mode 100644
+index 0000000..61faaec
+--- /dev/null
++++ b/lib/services/pdf_report_service.dart
+@@ -0,0 +1,328 @@
++import 'dart:io';
++import 'package:flutter/services.dart';
++import 'package:path_provider/path_provider.dart';
++import 'package:pdf/pdf.dart';
++import 'package:pdf/widgets.dart' as pw;
++import 'package:printing/printing.dart';
++import '../models/visited_domain.dart';
++import 'database_service.dart';
++
++class PdfReportService {
++  static final PdfReportService _instance = PdfReportService._internal();
++  static PdfReportService get instance => _instance;
++
++  PdfReportService._internal();
++
++  pw.Widget _buildStatCard(String title, String value, PdfColor color, String icon) {
++    return pw.Container(
++      width: 150,
++      padding: const pw.EdgeInsets.all(15),
++      decoration: pw.BoxDecoration(
++        color: PdfColor.fromHex('#F5F5F5'),
++        borderRadius: pw.BorderRadius.circular(10),
++        border: pw.Border.all(color: color),
++      ),
++      child: pw.Column(
++        crossAxisAlignment: pw.CrossAxisAlignment.start,
++        children: [
++          pw.Container(
++            padding: const pw.EdgeInsets.all(8),
++            decoration: pw.BoxDecoration(
++              color: PdfColor.fromHex('#E3F2FD'),
++              borderRadius: pw.BorderRadius.circular(8),
++            ),
++            child: pw.Text(
++              icon,
++              style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
++            ),
++          ),
++          pw.SizedBox(height: 10),
++          pw.Text(
++            value,
++            style: pw.TextStyle(
++              fontSize: 24,
++              fontWeight: pw.FontWeight.bold,
++              color: color,
++            ),
++          ),
++          pw.SizedBox(height: 5),
++          pw.Text(
++            title,
++            style: pw.TextStyle(color: color),
++          ),
++        ],
++      ),
++    );
++  }
++
++  Future<String> generateThreatReport() async {
++    final pdf = pw.Document(
++      theme: pw.ThemeData.withFont(
++        base: await PdfGoogleFonts.nunitoRegular(),
++        bold: await PdfGoogleFonts.nunitoBold(),
++      ),
++    );
++    final DatabaseService dbService = DatabaseService.instance;
++
++    // Verileri al
++    final List<VisitedDomain> safeDomains = await dbService.getSafeDomains();
++    final List<VisitedDomain> unsafeDomains = await dbService.getUnsafeDomains();
++    
++    // ƒ∞statistikleri hesapla
++    final int totalDomains = safeDomains.length + unsafeDomains.length;
++    final double threatPercentage = totalDomains > 0 
++        ? (unsafeDomains.length / totalDomains) * 100 
++        : 0.0;
++
++    // PDF sayfasƒ±nƒ± olu≈ütur
++    pdf.addPage(
++      pw.MultiPage(
++        pageFormat: PdfPageFormat.a4,
++        build: (pw.Context context) => [
++          _buildHeader(),
++          _buildSummarySection(totalDomains, unsafeDomains.length, threatPercentage),
++          _buildDomainList('Tehlikeli Domain\'ler', unsafeDomains),
++          _buildDomainList('G√ºvenli Domain\'ler', safeDomains),
++        ],
++      ),
++    );
++
++    // PDF'i Download klas√∂r√ºne kaydet
++    final String fileName = 'RoRuShield_Rapor_${DateTime.now().millisecondsSinceEpoch}.pdf';
++    final Directory? directory = Directory('/storage/emulated/0/Download');
++    if (!await directory!.exists()) {
++      throw Exception('Download klas√∂r√º bulunamadƒ±');
++    }
++    final String path = '${directory.path}/$fileName';
++    final File file = File(path);
++    await file.writeAsBytes(await pdf.save());
++    
++    return path;
++  }
++
++  pw.Widget _buildHeader() {
++    return pw.Container(
++      padding: const pw.EdgeInsets.all(20),
++      decoration: pw.BoxDecoration(
++        gradient: pw.LinearGradient(
++          colors: [PdfColors.blue800, PdfColors.blue400],
++          begin: pw.Alignment.topLeft,
++          end: pw.Alignment.bottomRight,
++        ),
++        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(15)),
++      ),
++      child: pw.Column(
++        crossAxisAlignment: pw.CrossAxisAlignment.start,
++        children: [
++          pw.Row(
++            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
++            children: [
++              pw.Column(
++                crossAxisAlignment: pw.CrossAxisAlignment.start,
++                children: [
++                  pw.Text(
++                    'RoRuShield',
++                    style: pw.TextStyle(
++                      fontSize: 32,
++                      fontWeight: pw.FontWeight.bold,
++                      color: PdfColors.white,
++                    ),
++                  ),
++                  pw.Text(
++                    'Tehdit Analiz Raporu',
++                    style: pw.TextStyle(
++                      fontSize: 20,
++                      color: PdfColors.white,
++                    ),
++                  ),
++                ],
++              ),
++              pw.Container(
++                padding: const pw.EdgeInsets.all(10),
++                decoration: pw.BoxDecoration(
++                  color: PdfColor.fromHex('#E6FFFFFF'),
++                  borderRadius: pw.BorderRadius.circular(10),
++                ),
++                child: pw.Text(
++                  DateTime.now().toString().split('.')[0],
++                  style: pw.TextStyle(
++                    fontSize: 14,
++                    color: PdfColors.blue800,
++                    fontWeight: pw.FontWeight.bold,
++                  ),
++                ),
++              ),
++            ],
++          ),
++        ],
++      ),
++    );
++  }
++
++  pw.Widget _buildSummarySection(int total, int unsafe, double percentage) {
++    final safeCount = total - unsafe;
++    return pw.Container(
++      margin: const pw.EdgeInsets.symmetric(vertical: 20),
++      child: pw.Column(
++        crossAxisAlignment: pw.CrossAxisAlignment.start,
++        children: [
++          pw.Text(
++            '√ñzet ƒ∞statistikler',
++            style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, color: PdfColors.blue800),
++          ),
++          pw.SizedBox(height: 15),
++          pw.Row(
++            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
++            children: [
++              _buildStatCard(
++                'Toplam Domain',
++                total.toString(),
++                PdfColors.blue600,
++                'O',
++              ),
++              _buildStatCard(
++                'G√ºvenli',
++                safeCount.toString(),
++                PdfColors.green600,
++                '+',
++              ),
++              _buildStatCard(
++                'Tehlikeli',
++                unsafe.toString(),
++                PdfColors.red600,
++                '!',
++              ),
++            ],
++          ),
++          pw.SizedBox(height: 15),
++          pw.Container(
++            padding: const pw.EdgeInsets.all(15),
++            decoration: pw.BoxDecoration(
++              color: percentage > 50 ? PdfColors.red50 : PdfColors.green50,
++              borderRadius: pw.BorderRadius.circular(10),
++              border: pw.Border.all(
++                color: percentage > 50 ? PdfColors.red200 : PdfColors.green200,
++                width: 1,
++              ),
++            ),
++            child: pw.Row(
++              children: [
++                pw.Container(
++                  width: 50,
++                  height: 50,
++                  decoration: pw.BoxDecoration(
++                    color: percentage > 50 ? PdfColors.red200 : PdfColors.green200,
++                    shape: pw.BoxShape.circle,
++                  ),
++                  alignment: pw.Alignment.center,
++                  child: pw.Text(
++                    '${percentage.toStringAsFixed(1)}%',
++                    style: pw.TextStyle(
++                      color: percentage > 50 ? PdfColors.red900 : PdfColors.green900,
++                      fontWeight: pw.FontWeight.bold,
++                    ),
++                  ),
++                ),
++                pw.SizedBox(width: 15),
++                pw.Column(
++                  crossAxisAlignment: pw.CrossAxisAlignment.start,
++                  children: [
++                    pw.Text(
++                      'Tehdit Seviyesi',
++                      style: pw.TextStyle(
++                        fontSize: 16,
++                        fontWeight: pw.FontWeight.bold,
++                        color: percentage > 50 ? PdfColors.red900 : PdfColors.green900,
++                      ),
++                    ),
++                    pw.Text(
++                      percentage > 50 ? 'Y√ºksek Risk' : 'D√º≈ü√ºk Risk',
++                      style: pw.TextStyle(
++                        color: percentage > 50 ? PdfColors.red700 : PdfColors.green700,
++                      ),
++                    ),
++                  ],
++                ),
++              ],
++            ),
++          ),
++        ],
++      ),
++    );
++  }
++
++  pw.Widget _buildDomainList(String title, List<VisitedDomain> domains) {
++    return pw.Container(
++      margin: const pw.EdgeInsets.only(top: 20),
++      child: pw.Column(
++        crossAxisAlignment: pw.CrossAxisAlignment.start,
++        children: [
++          pw.Container(
++            padding: const pw.EdgeInsets.symmetric(horizontal: 15, vertical: 10),
++            decoration: pw.BoxDecoration(
++              color: PdfColors.blue50,
++              borderRadius: const pw.BorderRadius.only(
++                topLeft: pw.Radius.circular(10),
++                topRight: pw.Radius.circular(10),
++              ),
++            ),
++            child: pw.Text(
++              title,
++              style: pw.TextStyle(
++                fontSize: 18,
++                fontWeight: pw.FontWeight.bold,
++                color: PdfColors.blue800,
++              ),
++            ),
++          ),
++          pw.Container(
++            decoration: pw.BoxDecoration(
++              border: pw.Border.all(color: PdfColors.blue100),
++              borderRadius: const pw.BorderRadius.only(
++                bottomLeft: pw.Radius.circular(10),
++                bottomRight: pw.Radius.circular(10),
++              ),
++            ),
++            child: pw.Column(
++              children: [
++                ...domains.map((domain) => pw.Container(
++                  decoration: pw.BoxDecoration(
++                    border: pw.Border(bottom: pw.BorderSide(color: PdfColors.blue50)),
++                  ),
++                  padding: const pw.EdgeInsets.all(10),
++                  child: pw.Row(
++                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
++                    children: [
++                      pw.Expanded(
++                        flex: 2,
++                        child: pw.Text(
++                          domain.domain,
++                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
++                        ),
++                      ),
++                      pw.Expanded(
++                        child: pw.Text(
++                          domain.timestamp.toString().split(' ')[0],
++                          style: const pw.TextStyle(color: PdfColors.grey700),
++                        ),
++                      ),
++                    ],
++                  ),
++                )),
++                if (domains.isEmpty)
++                  pw.Container(
++                    padding: const pw.EdgeInsets.all(15),
++                    alignment: pw.Alignment.center,
++                    child: pw.Text(
++                      'Kayƒ±t bulunamadƒ±',
++                      style: const pw.TextStyle(color: PdfColors.grey),
++                    ),
++                  ),
++              ],
++            ),
++          ),
++        ],
++      ),
++    );
++  }
++}
+diff --git a/linux/flutter/generated_plugin_registrant.cc b/linux/flutter/generated_plugin_registrant.cc
+index f6f23bf..2dccc22 100644
+--- a/linux/flutter/generated_plugin_registrant.cc
++++ b/linux/flutter/generated_plugin_registrant.cc
+@@ -6,9 +6,13 @@
+ 
+ #include "generated_plugin_registrant.h"
+ 
++#include <printing/printing_plugin.h>
+ #include <url_launcher_linux/url_launcher_plugin.h>
+ 
+ void fl_register_plugins(FlPluginRegistry* registry) {
++  g_autoptr(FlPluginRegistrar) printing_registrar =
++      fl_plugin_registry_get_registrar_for_plugin(registry, "PrintingPlugin");
++  printing_plugin_register_with_registrar(printing_registrar);
+   g_autoptr(FlPluginRegistrar) url_launcher_linux_registrar =
+       fl_plugin_registry_get_registrar_for_plugin(registry, "UrlLauncherPlugin");
+   url_launcher_plugin_register_with_registrar(url_launcher_linux_registrar);
+diff --git a/linux/flutter/generated_plugins.cmake b/linux/flutter/generated_plugins.cmake
+index f16b4c3..45f2369 100644
+--- a/linux/flutter/generated_plugins.cmake
++++ b/linux/flutter/generated_plugins.cmake
+@@ -3,6 +3,7 @@
+ #
+ 
+ list(APPEND FLUTTER_PLUGIN_LIST
++  printing
+   url_launcher_linux
+ )
+ 
+diff --git a/macos/Flutter/GeneratedPluginRegistrant.swift b/macos/Flutter/GeneratedPluginRegistrant.swift
+index 3298851..726c7f5 100644
+--- a/macos/Flutter/GeneratedPluginRegistrant.swift
++++ b/macos/Flutter/GeneratedPluginRegistrant.swift
+@@ -7,6 +7,7 @@ import Foundation
+ 
+ import flutter_local_notifications
+ import path_provider_foundation
++import printing
+ import share_plus
+ import shared_preferences_foundation
+ import sqflite_darwin
+@@ -15,6 +16,7 @@ import url_launcher_macos
+ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+   FlutterLocalNotificationsPlugin.register(with: registry.registrar(forPlugin: "FlutterLocalNotificationsPlugin"))
+   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
++  PrintingPlugin.register(with: registry.registrar(forPlugin: "PrintingPlugin"))
+   SharePlusMacosPlugin.register(with: registry.registrar(forPlugin: "SharePlusMacosPlugin"))
+   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
+   SqflitePlugin.register(with: registry.registrar(forPlugin: "SqflitePlugin"))
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 5545e06..2faa326 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -20,6 +20,9 @@ dependencies:
+   url_launcher: ^6.2.5
+   shared_preferences: ^2.2.2
+   permission_handler: ^11.3.0
++  pdf: ^3.10.8
++  path_provider: ^2.1.2
++  printing: ^5.14.2
+ 
+ dev_dependencies:
+   flutter_launcher_icons: ^0.14.3
+diff --git a/windows/flutter/generated_plugin_registrant.cc b/windows/flutter/generated_plugin_registrant.cc
+index d5013ba..cb63ddc 100644
+--- a/windows/flutter/generated_plugin_registrant.cc
++++ b/windows/flutter/generated_plugin_registrant.cc
+@@ -7,12 +7,15 @@
+ #include "generated_plugin_registrant.h"
+ 
+ #include <permission_handler_windows/permission_handler_windows_plugin.h>
++#include <printing/printing_plugin.h>
+ #include <share_plus/share_plus_windows_plugin_c_api.h>
+ #include <url_launcher_windows/url_launcher_windows.h>
+ 
+ void RegisterPlugins(flutter::PluginRegistry* registry) {
+   PermissionHandlerWindowsPluginRegisterWithRegistrar(
+       registry->GetRegistrarForPlugin("PermissionHandlerWindowsPlugin"));
++  PrintingPluginRegisterWithRegistrar(
++      registry->GetRegistrarForPlugin("PrintingPlugin"));
+   SharePlusWindowsPluginCApiRegisterWithRegistrar(
+       registry->GetRegistrarForPlugin("SharePlusWindowsPluginCApi"));
+   UrlLauncherWindowsRegisterWithRegistrar(
+diff --git a/windows/flutter/generated_plugins.cmake b/windows/flutter/generated_plugins.cmake
+index 2201651..ce223bb 100644
+--- a/windows/flutter/generated_plugins.cmake
++++ b/windows/flutter/generated_plugins.cmake
+@@ -4,6 +4,7 @@
+ 
+ list(APPEND FLUTTER_PLUGIN_LIST
+   permission_handler_windows
++  printing
+   share_plus
+   url_launcher_windows
+ )

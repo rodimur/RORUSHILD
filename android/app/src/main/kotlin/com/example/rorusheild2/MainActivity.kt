@@ -16,6 +16,7 @@ import android.view.accessibility.AccessibilityManager
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.os.Environment
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
@@ -46,6 +47,28 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+
+        // Depolama izni yönetimi için yeni metot çağrısı
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.example.rorusheild2/storage_permission").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "openStorageSettings" -> {
+                    try {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        intent.data = android.net.Uri.parse("package:${applicationContext.packageName}")
+                        startActivity(intent)
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.error("UNAVAILABLE", "Ayarlar açılamadı", null)
+                    }
+                }
+                "checkStoragePermission" -> {
+                    val readPermission = checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    val writePermission = checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    result.success(readPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED)
+                }
+                else -> result.notImplemented()
+            }
+        }
 
         // VPN ile ilgili kanal
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.example.rorusheild2/vpn_channel")
