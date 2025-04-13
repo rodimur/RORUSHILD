@@ -1,0 +1,2 @@
+/Users/rodi/Desktop/rorusheild2/android/app/.cxx/Debug/3q5t6x4z/x86/CMakeFiles/edit_cache.dir
+/Users/rodi/Desktop/rorusheild2/android/app/.cxx/Debug/3q5t6x4z/x86/CMakeFiles/rebuild_cache.dir
