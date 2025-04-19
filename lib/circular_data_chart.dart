@@ -1,7 +1,31 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/services.dart';
+
+class AppData {
+  final String name;
+  final double usage;
+  final String? iconBase64;
+  final String packageName;
+
+  AppData({
+    required this.name,
+    required this.usage,
+    this.iconBase64,
+    required this.packageName,
+  });
+
+  factory AppData.fromMap(Map<dynamic, dynamic> map) {
+    return AppData(
+      name: map['appName']?.toString() ?? 'Unknown App',
+      usage: (map['usage'] as num?)?.toDouble() ?? 0.0,
+      iconBase64: map['icon']?.toString(),
+      packageName: map['packageName']?.toString() ?? '',
+    );
+  }
+}
 
 class CircularDataChart extends StatefulWidget {
   const CircularDataChart({super.key});
@@ -12,10 +36,8 @@ class CircularDataChart extends StatefulWidget {
 
 class _CircularDataChartState extends State<CircularDataChart> {
   int selectedAppIndex = 0;
-  // Uygulama kullanım verileri (getAppUsage ile)
-  List<Map<String, dynamic>> apps = [];
+  List<AppData> apps = [];
 
-  // Kategori verileri: Download, Upload, Wi‑Fi, Mobile
   final List<Map<String, dynamic>> categories = [
     {'name': 'Download', 'icon': Icons.download, 'usage': 0.0},
     {'name': 'Upload', 'icon': Icons.upload, 'usage': 0.0},
@@ -33,16 +55,14 @@ class _CircularDataChartState extends State<CircularDataChart> {
   @override
   void initState() {
     super.initState();
-    _loadAppUsage();      // Uygulama bazlı verileri al
-    _loadDetailedUsage(); // Kategori verilerini al: Download, Upload, Wi‑Fi, Mobile
-    // Her 5 saniyede bir detaylı kullanım verilerini, her 15 saniyede bir uygulama verilerini güncelle
+    _loadAppUsage();
+    _loadDetailedUsage();
     _usageTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (!mounted) {
         timer.cancel();
         return;
       }
       _loadDetailedUsage();
-      // Her 15 saniyede bir uygulama kullanım verilerini güncelle
       if (timer.tick % 3 == 0) {
         _loadAppUsage();
       }
@@ -55,14 +75,7 @@ class _CircularDataChartState extends State<CircularDataChart> {
       final List<dynamic> result =
       await _appUsageChannel.invokeMethod('getAppUsage');
       setState(() {
-        apps = result.map((data) {
-          return {
-            'name': data['appName'],
-            'usage': (data['usage'] as num).toDouble(),
-            'icon': FontAwesomeIcons.mobileAlt,
-            'color': Colors.blue,
-          };
-        }).toList();
+        apps = result.map((data) => AppData.fromMap(data as Map<dynamic, dynamic>)).toList();
         selectedAppIndex = apps.isNotEmpty ? 0 : 0;
       });
     } catch (e) {
@@ -75,8 +88,7 @@ class _CircularDataChartState extends State<CircularDataChart> {
     try {
       final Map<dynamic, dynamic> result =
       await _networkUsageChannel.invokeMethod('getDetailedNetworkUsage');
-      
-      // Toplam download ve upload değerlerini doğrudan al
+
       final double totalRx = (result['totalRx'] as num).toDouble();
       final double totalTx = (result['totalTx'] as num).toDouble();
       final double wifiRx = (result['wifiRx'] as num).toDouble();
@@ -85,13 +97,9 @@ class _CircularDataChartState extends State<CircularDataChart> {
       final double mobileTx = (result['mobileTx'] as num).toDouble();
 
       setState(() {
-        // Download: Toplam download verisi
         categories[0]['usage'] = totalRx;
-        // Upload: Toplam upload verisi
         categories[1]['usage'] = totalTx;
-        // Wi‑Fi toplam: rx + tx
         categories[2]['usage'] = wifiRx + wifiTx;
-        // Mobile toplam: rx + tx
         categories[3]['usage'] = mobileRx + mobileTx;
       });
     } catch (e) {
@@ -125,8 +133,8 @@ class _CircularDataChartState extends State<CircularDataChart> {
                   height: 240,
                   child: CustomPaint(
                     painter: CircularChartPainter(
-                      segments: apps.map((app) => app['usage'] as double).toList(),
-                      colors: apps.map((app) => app['color'] as Color).toList(),
+                      segments: [...apps.map((e) => e.usage)],
+                      colors: [...apps.map((e) => Colors.blue)],
                       selectedIndex: selectedAppIndex,
                     ),
                   ),
@@ -135,7 +143,7 @@ class _CircularDataChartState extends State<CircularDataChart> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${apps[selectedAppIndex]['usage'].toStringAsFixed(2)}',
+                      '${apps[selectedAppIndex].usage.toStringAsFixed(2)}',
                       style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -154,7 +162,6 @@ class _CircularDataChartState extends State<CircularDataChart> {
               ],
             ),
           ),
-          // Kategori satırı: Download, Upload, Wi‑Fi, Mobile
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: categories.map((category) {
@@ -190,33 +197,43 @@ class _CircularDataChartState extends State<CircularDataChart> {
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
-                      color: selectedAppIndex == index
-                          ? Colors.blue
-                          : (isDark ? Colors.grey[800] : Colors.blue.withOpacity(0.1)),
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: selectedAppIndex == index
+                            ? [Colors.blue[900]!, Colors.blue[600]!]
+                            : [
+                          Color.lerp(Colors.blue[900], Colors.blue[300], index / apps.length)!,
+                          Color.lerp(Colors.blue[700], Colors.blue[100], index / apps.length)!,
+                        ],
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ListTile(
-                      leading: Icon(
-                        app['icon'] as IconData,
-                        color: selectedAppIndex == index
-                            ? Colors.white
-                            : (isDark ? Colors.blue[300] : Colors.blue),
+                      leading: app.iconBase64 != null
+                          ? ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.memory(
+                          base64Decode(app.iconBase64!),
+                          width: 32,
+                          height: 32,
+                        ),
+                      )
+                          : Icon(
+                        FontAwesomeIcons.mobileAlt,
+                        color: selectedAppIndex == index ? Colors.white : Colors.blue[900],
                       ),
                       title: Text(
-                        app['name'] as String,
+                        app.name,
                         style: TextStyle(
-                          color: selectedAppIndex == index
-                              ? Colors.white
-                              : (isDark ? Colors.white : Colors.black87),
+                          color: selectedAppIndex == index ? Colors.white : (isDark ? Colors.white : Colors.blue[900]),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       trailing: Text(
-                        '${(app['usage'] as double).toStringAsFixed(2)} GB',
+                        '${app.usage.toStringAsFixed(2)} GB',
                         style: TextStyle(
-                          color: selectedAppIndex == index
-                              ? Colors.white
-                              : (isDark ? Colors.white : Colors.black87),
+                          color: selectedAppIndex == index ? Colors.white : (isDark ? Colors.white70 : Colors.blue[800]),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -249,21 +266,26 @@ class CircularChartPainter extends CustomPainter {
     final radius = size.width / 2;
     final paint = Paint()
       ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.butt
       ..strokeWidth = 25;
 
-    double startAngle = -90 * (3.14159 / 180);
+    double currentAngle = -90 * (3.14159 / 180);
     final total = segments.reduce((a, b) => a + b);
-    for (int i = 0; i < segments.length; i++) {
-      final sweepAngle = (segments[i] / total) * 2 * 3.14159;
-      paint.color = i == selectedIndex ? colors[i] : colors[i].withOpacity(0.3);
+
+    List<double> rotatedSegments = [...segments.sublist(selectedIndex), ...segments.sublist(0, selectedIndex)];
+    List<Color> rotatedColors = [...colors.sublist(selectedIndex), ...colors.sublist(0, selectedIndex)];
+
+    for (int i = 0; i < rotatedSegments.length; i++) {
+      final sweepAngle = (rotatedSegments[i] / total) * 2 * 3.14159;
+      paint.color = (i == 0) ? rotatedColors[i] : rotatedColors[i].withOpacity(0.1);
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
-        startAngle,
+        currentAngle,
         sweepAngle,
         false,
         paint,
       );
-      startAngle += sweepAngle;
+      currentAngle += sweepAngle;
     }
   }
 

@@ -121,64 +121,8 @@ class MainActivity : FlutterActivity() {
                                 return@setMethodCallHandler
                             }
 
-                            val appUsageList = mutableListOf<Map<String, Any>>()
-                            val networkStatsManager = getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
-                            // Son 30 gün (1 ay) için
-                            val startTime = System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000)
-                            val endTime = System.currentTimeMillis()
-                            val pm = packageManager
-                            val installedApps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-                            val tempBucket = NetworkStats.Bucket()
-                            for (app in installedApps) {
-                                if ((app.flags and ApplicationInfo.FLAG_SYSTEM) != 0 &&
-                                    (app.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0) {
-                                    continue
-                                }
-                                try {
-                                    val uid = app.uid
-                                    val subscriberId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "" else {
-                                        try {
-                                            val tm = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                                            tm.subscriberId ?: ""
-                                        } catch (e: Exception) {
-                                            ""
-                                        }
-                                    }
-                                    val mobileBucket = networkStatsManager.queryDetailsForUid(
-                                        ConnectivityManager.TYPE_MOBILE,
-                                        subscriberId,
-                                        startTime,
-                                        endTime,
-                                        uid
-                                    )
-                                    var mobileBytes = 0L
-                                    while (mobileBucket.hasNextBucket()) {
-                                        mobileBucket.getNextBucket(tempBucket)
-                                        mobileBytes += tempBucket.rxBytes + tempBucket.txBytes
-                                    }
-                                    mobileBucket.close()
-                                    val wifiBucket = networkStatsManager.queryDetailsForUid(
-                                        ConnectivityManager.TYPE_WIFI,
-                                        "",
-                                        startTime,
-                                        endTime,
-                                        uid
-                                    )
-                                    var wifiBytes = 0L
-                                    while (wifiBucket.hasNextBucket()) {
-                                        wifiBucket.getNextBucket(tempBucket)
-                                        wifiBytes += tempBucket.rxBytes + tempBucket.txBytes
-                                    }
-                                    wifiBucket.close()
-                                    val totalBytes = mobileBytes + wifiBytes
-                                    val usageGB = totalBytes.toDouble() / (1024 * 1024 * 1024)
-                                    val appLabel = pm.getApplicationLabel(app).toString()
-                                    appUsageList.add(mapOf("appName" to appLabel, "usage" to usageGB))
-                                } catch (ex: Exception) {
-                                    continue
-                                }
-                            }
-                            appUsageList.sortByDescending { it["usage"] as Double }
+                            val appUsageHelper = AppUsageHelper(this)
+                            val appUsageList = appUsageHelper.getAppUsage()
                             
                             // Sonucu önbelleğe al
                             cachedAppUsage = appUsageList
