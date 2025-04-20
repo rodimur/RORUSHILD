@@ -32,7 +32,28 @@ Uygulama şu anda sadece özel APK olarak kullanılmaktadır. Denemek istersen b
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            const Icon(Icons.shield, size: 80, color: Colors.blue),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.15),
+                    blurRadius: 18,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Image.asset(
+                  'assets/icon/rorushieldicon.png',
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.shield, size: 80, color: Colors.blue),
+                ),
+              ),
+            ),
             const SizedBox(height: 16),
             Text(
               "RoRü Shield ile ağını koru!",
