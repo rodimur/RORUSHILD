@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -26,7 +28,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     final email = Uri(
       scheme: 'mailto',
       path: 'rumeysakaya469@gmail.com',
-      query: 'subject=RoRü Shield Geri Bildirim&body=$message\n\n\nCihaz Bilgileri:\n$deviceInfo',
+      query: 'subject=RoRü Shield Geri Bildirim&body=$message\n\n\n$deviceInfo',
     );
 
     try {
@@ -73,10 +75,35 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   }
 
   Future<String> _getDeviceInfo() async {
-    // 👇 Cihaz bilgilerini al
-    return '''
-Gönderim Tarihi: ${DateTime.now().toString()}
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String info = '';
+    if (Platform.isAndroid) {
+      final android = await deviceInfo.androidInfo;
+      info = '''
+Cihaz Bilgileri:
+Cihaz Türü: Android
+Marka: ${android.brand}
+Model: ${android.model}
+Android Sürümü: ${android.version.release} (SDK ${android.version.sdkInt})
+Cihaz: ${android.device}
+Üretici: ${android.manufacturer}
 ''';
+    } else if (Platform.isIOS) {
+      final ios = await deviceInfo.iosInfo;
+      info = '''
+Cihaz Türü: iOS
+Model: ${ios.utsname.machine}
+Sistem: ${ios.systemName} ${ios.systemVersion}
+Cihaz Adı: ${ios.name}
+''';
+    } else {
+      info = 'Bilinmeyen platform';
+    }
+    final now = DateTime.now();
+    final formattedDate = "${now.year.toString().padLeft(4, '0')}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
+    return '''
+Gönderim Tarihi: $formattedDate
+$info''';
   }
 
   @override
@@ -92,8 +119,13 @@ Gönderim Tarihi: ${DateTime.now().toString()}
         iconTheme: const IconThemeData(color: Colors.blue),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
