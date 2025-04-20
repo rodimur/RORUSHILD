@@ -211,85 +211,89 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "RoRü Shield",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : Colors.blue.shade800,
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // 🔔 Bildirim Switch'i
-              buildNotificationToggle(context),
-
-              buildMenuItem(context, Icons.help_outline, "Yardım Kılavuzu", () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HelpScreen()),
-                );
-              }),
-              buildMenuItem(context, Icons.share, "Uygulamayı Paylaş", () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ShareScreen()),
-                );
-              }),
-              buildMenuItem(context, Icons.feedback_outlined, "Geribildirim Gönder", () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FeedbackScreen(),
-                  ),
-                );
-              }),
-              buildMenuItem(context, Icons.analytics_outlined, "Tehdit Analizi Raporu", _downloadThreatReport),
-              const SizedBox(height: 10),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+          child: SingleChildScrollView(
+            child: IntrinsicHeight(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Light Mode Butonu
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isDark ? Colors.white : Colors.blue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    // Dark modda iken aktif, Light modda pasif
-                    onPressed: isDark ? widget.toggleTheme : null,
-                    child: Icon(
-                      Icons.light_mode,
-                      color: isDark ? Colors.black : Colors.grey.shade400,
+                  Text(
+                    "RoRü Shield",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : Colors.blue.shade800,
                     ),
                   ),
-                  const SizedBox(width: 20),
-                  // Dark Mode Butonu
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: !isDark ? Colors.blue : Colors.grey.shade400,
+                  const SizedBox(height: 20),
+
+                  // 🔔 Bildirim Switch'i
+                  buildNotificationToggle(context),
+
+                  buildMenuItem(context, Icons.help_outline, "Yardım Kılavuzu", () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HelpScreen()),
+                    );
+                  }),
+                  buildMenuItem(context, Icons.share, "Uygulamayı Paylaş", () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ShareScreen()),
+                    );
+                  }),
+                  buildMenuItem(context, Icons.feedback_outlined, "Geribildirim Gönder", () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FeedbackScreen(),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                    );
+                  }),
+                  buildMenuItem(context, Icons.analytics_outlined, "Tehdit Analizi Raporu", _downloadThreatReport),
+                  const SizedBox(height: 10),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Light Mode Butonu
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isDark ? Colors.white : Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        // Dark modda iken aktif, Light modda pasif
+                        onPressed: isDark ? widget.toggleTheme : null,
+                        child: Icon(
+                          Icons.light_mode,
+                          color: isDark ? Colors.black : Colors.grey.shade400,
+                        ),
                       ),
-                    ),
-                    // Light modda iken aktif, Dark modda pasif
-                    onPressed: !isDark ? widget.toggleTheme : null,
-                    child: Icon(
-                      Icons.dark_mode,
-                      color: !isDark ? Colors.blue : Colors.grey.shade400,
-                    ),
+                      const SizedBox(width: 20),
+                      // Dark Mode Butonu
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: !isDark ? Colors.blue : Colors.grey.shade400,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        // Light modda iken aktif, Dark modda pasif
+                        onPressed: !isDark ? widget.toggleTheme : null,
+                        child: Icon(
+                          Icons.dark_mode,
+                          color: !isDark ? Colors.blue : Colors.grey.shade400,
+                        ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 20),
                 ],
               ),
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
         ),
       ),
