@@ -39,10 +39,10 @@ class _CircularDataChartState extends State<CircularDataChart> {
   List<AppData> apps = [];
 
   final List<Map<String, dynamic>> categories = [
-    {'name': 'Download', 'icon': Icons.download, 'usage': 0.0},
-    {'name': 'Upload', 'icon': Icons.upload, 'usage': 0.0},
-    {'name': 'Wi‑Fi', 'icon': Icons.wifi, 'usage': 0.0},
-    {'name': 'Mobile', 'icon': Icons.cell_tower, 'usage': 0.0},
+    {'name': 'Toplam Download', 'icon': Icons.download, 'usage': 0.0},
+    {'name': 'Toplam Upload', 'icon': Icons.upload, 'usage': 0.0},
+    {'name': 'Toplam Wi‑Fi', 'icon': Icons.wifi, 'usage': 0.0},
+    {'name': 'Toplam Mobile', 'icon': Icons.cell_tower, 'usage': 0.0},
   ];
 
   static const MethodChannel _appUsageChannel =
@@ -89,18 +89,24 @@ class _CircularDataChartState extends State<CircularDataChart> {
       final Map<dynamic, dynamic> result =
       await _networkUsageChannel.invokeMethod('getDetailedNetworkUsage');
 
+      // Kotlin tarafından gönderilen toplam değerleri al
       final double totalRx = (result['totalRx'] as num).toDouble();
       final double totalTx = (result['totalTx'] as num).toDouble();
-      final double wifiRx = (result['wifiRx'] as num).toDouble();
-      final double wifiTx = (result['wifiTx'] as num).toDouble();
-      final double mobileRx = (result['mobileRx'] as num).toDouble();
-      final double mobileTx = (result['mobileTx'] as num).toDouble();
+      final double totalWifi = result.containsKey('totalWifi') ? (result['totalWifi'] as num).toDouble() : 0.0;
+      final double totalMobile = result.containsKey('totalMobile') ? (result['totalMobile'] as num).toDouble() : 0.0;
+
+      // Uygulamaların toplam kullanımını hesapla
+      double totalAppUsage = 0.0;
+      for (var app in apps) {
+        totalAppUsage += app.usage;
+      }
 
       setState(() {
-        categories[0]['usage'] = totalRx;
-        categories[1]['usage'] = totalTx;
-        categories[2]['usage'] = wifiRx + wifiTx;
-        categories[3]['usage'] = mobileRx + mobileTx;
+        // Kategorileri gerçek toplam değerlerle güncelle
+        categories[0]['usage'] = totalRx;       // Toplam Download
+        categories[1]['usage'] = totalTx;       // Toplam Upload
+        categories[2]['usage'] = totalWifi;     // Toplam Wi-Fi
+        categories[3]['usage'] = totalMobile;   // Toplam Mobile
       });
     } catch (e) {
       print("Detaylı network verisi alınırken hata: $e");

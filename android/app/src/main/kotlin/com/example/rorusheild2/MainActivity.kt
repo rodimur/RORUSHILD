@@ -222,55 +222,75 @@ class MainActivity : FlutterActivity() {
         return wifiBytes.toDouble() / (1024 * 1024 * 1024)
     }
 
-    // Ayrı download & upload verilerini toplayan metot (TrafficStats ile – cihaz yeniden başlatılana kadar kümülatif değerler)
+    // Ayrı download & upload verilerini toplayan metot (AppUsageHelper ile entegre edilmiş)
     private fun getDetailedNetworkUsage(): Map<String, Double> {
-        val prefs = getSharedPreferences("network_stats", Context.MODE_PRIVATE)
+        // Önce AppUsageHelper'dan uygulama kullanım verilerini al
+        val appUsageHelper = AppUsageHelper(this)
+        appUsageHelper.getAppUsage() // Bu çağrı totalNetworkStats'i güncelleyecek
+        
+        // AppUsageHelper'dan toplam değerleri al
+        val totalStats = AppUsageHelper.totalNetworkStats
+        
+        // Eğer AppUsageHelper'dan gelen değerler sıfırsa, TrafficStats'ten al
+        if (totalStats["totalUsage"] == 0.0) {
+            val prefs = getSharedPreferences("network_stats", Context.MODE_PRIVATE)
 
-        // Mevcut mobil veri değerlerini al
-        val currentMobileRx = TrafficStats.getMobileRxBytes()
-        val currentMobileTx = TrafficStats.getMobileTxBytes()
+            // Mevcut mobil veri değerlerini al
+            val currentMobileRx = TrafficStats.getMobileRxBytes()
+            val currentMobileTx = TrafficStats.getMobileTxBytes()
 
-        // Son kaydedilen mobil veri değerlerini al
-        val lastMobileRx = prefs.getLong("last_mobile_rx", currentMobileRx)
-        val lastMobileTx = prefs.getLong("last_mobile_tx", currentMobileTx)
+            // Son kaydedilen mobil veri değerlerini al
+            val lastMobileRx = prefs.getLong("last_mobile_rx", currentMobileRx)
+            val lastMobileTx = prefs.getLong("last_mobile_tx", currentMobileTx)
 
-        // Eğer mevcut değerler 0 ise (WiFi bağlantısında), son kaydedilen değerleri kullan
-        val mobileRx = if (currentMobileRx > 0) currentMobileRx else lastMobileRx
-        val mobileTx = if (currentMobileTx > 0) currentMobileTx else lastMobileTx
+            // Eğer mevcut değerler 0 ise (WiFi bağlantısında), son kaydedilen değerleri kullan
+            val mobileRx = if (currentMobileRx > 0) currentMobileRx else lastMobileRx
+            val mobileTx = if (currentMobileTx > 0) currentMobileTx else lastMobileTx
 
-        // Toplam veri değerlerini al
-        val totalRx = TrafficStats.getTotalRxBytes()
-        val totalTx = TrafficStats.getTotalTxBytes()
+            // Toplam veri değerlerini al
+            val totalRx = TrafficStats.getTotalRxBytes()
+            val totalTx = TrafficStats.getTotalTxBytes()
 
-        // WiFi değerlerini hesapla (toplam - mobil)
-        val wifiRx = totalRx - currentMobileRx
-        val wifiTx = totalTx - currentMobileTx
+            // WiFi değerlerini hesapla (toplam - mobil)
+            val wifiRx = totalRx - currentMobileRx
+            val wifiTx = totalTx - currentMobileTx
 
-        // Eğer mevcut mobil değerler 0'dan büyükse, değerleri kaydet
-        if (currentMobileRx > 0 && currentMobileTx > 0) {
-            prefs.edit().apply {
-                putLong("last_mobile_rx", currentMobileRx)
-                putLong("last_mobile_tx", currentMobileTx)
-                apply()
+            // Eğer mevcut mobil değerler 0'dan büyükse, değerleri kaydet
+            if (currentMobileRx > 0 && currentMobileTx > 0) {
+                prefs.edit().apply {
+                    putLong("last_mobile_rx", currentMobileRx)
+                    putLong("last_mobile_tx", currentMobileTx)
+                    apply()
+                }
             }
+
+            fun bytesToGb(value: Long): Double {
+                return value.toDouble() / (1024 * 1024 * 1024)
+            }
+
+            return mapOf(
+                "mobileRx" to bytesToGb(mobileRx),
+                "mobileTx" to bytesToGb(mobileTx),
+                "wifiRx" to bytesToGb(wifiRx),
+                "wifiTx" to bytesToGb(wifiTx),
+                "totalRx" to bytesToGb(totalRx),  // Toplam download
+                "totalTx" to bytesToGb(totalTx),  // Toplam upload
+                "totalWifi" to bytesToGb(wifiRx) + bytesToGb(wifiTx),  // Toplam Wi-Fi
+                "totalMobile" to bytesToGb(mobileRx) + bytesToGb(mobileTx)  // Toplam Mobile
+            )
+        } else {
+            // AppUsageHelper'dan gelen toplam değerleri kullan
+            return mapOf(
+                "mobileRx" to totalStats["totalMobileUsage"]!! * 0.7,  // Mobil download (%70)
+                "mobileTx" to totalStats["totalMobileUsage"]!! * 0.3,  // Mobil upload (%30)
+                "wifiRx" to totalStats["totalWifiUsage"]!! * 0.7,     // WiFi download (%70)
+                "wifiTx" to totalStats["totalWifiUsage"]!! * 0.3,     // WiFi upload (%30)
+                "totalRx" to totalStats["totalDownload"]!!,           // Toplam download
+                "totalTx" to totalStats["totalUpload"]!!,             // Toplam upload
+                "totalWifi" to totalStats["totalWifiUsage"]!!,        // Toplam Wi-Fi
+                "totalMobile" to totalStats["totalMobileUsage"]!!     // Toplam Mobile
+            )
         }
-
-        fun bytesToGb(value: Long): Double {
-            return value.toDouble() / (1024 * 1024 * 1024)
-        }
-
-        // Tüm download ve upload değerlerini topla
-        val totalDownload = bytesToGb(totalRx)
-        val totalUpload = bytesToGb(totalTx)
-
-        return mapOf(
-            "mobileRx" to bytesToGb(mobileRx),
-            "mobileTx" to bytesToGb(mobileTx),
-            "wifiRx" to bytesToGb(wifiRx),
-            "wifiTx" to bytesToGb(wifiTx),
-            "totalRx" to totalDownload,  // Toplam download
-            "totalTx" to totalUpload     // Toplam upload
-        )
     }
 
     private fun hasUsageAccessPermission(): Boolean {

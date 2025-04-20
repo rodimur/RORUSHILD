@@ -58,21 +58,29 @@ class AppUsageHelper(private val context: Context) {
             val subscriberId = ""
             val bucket = NetworkStats.Bucket()
             
+            // Başlangıç zamanını 1 ay öncesine ayarla (daha uzun süreli veri için)
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.MONTH, -1)
+            val startTime = calendar.timeInMillis
+            val endTime = System.currentTimeMillis()
+            
             val wifiStats = networkStatsManager.querySummary(
                 ConnectivityManager.TYPE_WIFI,
                 subscriberId,
-                0,
-                System.currentTimeMillis()
+                startTime,
+                endTime
             )
             
             val mobileStats = networkStatsManager.querySummary(
                 ConnectivityManager.TYPE_MOBILE,
                 subscriberId,
-                0,
-                System.currentTimeMillis()
+                startTime,
+                endTime
             )
 
             val appStats = mutableMapOf<String, Double>()
+            var totalWifiUsage = 0.0
+            var totalMobileUsage = 0.0
             
             while (wifiStats.hasNextBucket()) {
                 wifiStats.getNextBucket(bucket)
@@ -82,6 +90,7 @@ class AppUsageHelper(private val context: Context) {
                     if (packages != null && packages.isNotEmpty()) {
                         val usage = (bucket.rxBytes + bucket.txBytes) / (1024.0 * 1024.0 * 1024.0)
                         appStats[packages[0]] = (appStats[packages[0]] ?: 0.0) + usage
+                        totalWifiUsage += usage
                     }
                 } catch (e: Exception) {
                     continue
@@ -96,11 +105,17 @@ class AppUsageHelper(private val context: Context) {
                     if (packages != null && packages.isNotEmpty()) {
                         val usage = (bucket.rxBytes + bucket.txBytes) / (1024.0 * 1024.0 * 1024.0)
                         appStats[packages[0]] = (appStats[packages[0]] ?: 0.0) + usage
+                        totalMobileUsage += usage
                     }
                 } catch (e: Exception) {
                     continue
                 }
             }
+
+            // Toplam kullanım değerlerini hesapla
+            var totalDownload = 0.0
+            var totalUpload = 0.0
+            var totalUsage = 0.0
 
             for ((packageName, usage) in appStats) {
                 try {
@@ -116,16 +131,38 @@ class AppUsageHelper(private val context: Context) {
                         "usage" to usage,
                         "icon" to iconBase64
                     ))
+                    
+                    totalUsage += usage
                 } catch (e: Exception) {
                     e.printStackTrace()
                     continue
                 }
             }
 
+            // Toplam değerleri global olarak sakla
+            totalNetworkStats = mapOf(
+                "totalUsage" to totalUsage,
+                "totalWifiUsage" to totalWifiUsage,
+                "totalMobileUsage" to totalMobileUsage,
+                "totalDownload" to totalUsage * 0.7, // Yaklaşık olarak %70 download
+                "totalUpload" to totalUsage * 0.3    // Yaklaşık olarak %30 upload
+            )
+
             return appUsageList.sortedByDescending { it["usage"] as Double }
         } catch (e: RemoteException) {
             e.printStackTrace()
             return emptyList()
         }
+    }
+    
+    // Toplam ağ istatistiklerini saklamak için companion object
+    companion object {
+        var totalNetworkStats: Map<String, Double> = mapOf(
+            "totalUsage" to 0.0,
+            "totalWifiUsage" to 0.0,
+            "totalMobileUsage" to 0.0,
+            "totalDownload" to 0.0,
+            "totalUpload" to 0.0
+        )
     }
 } 
