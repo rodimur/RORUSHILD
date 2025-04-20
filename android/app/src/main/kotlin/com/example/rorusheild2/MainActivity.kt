@@ -70,6 +70,27 @@ class MainActivity : FlutterActivity() {
             }
         }
 
+        // Bildirim ayarları kanalını ekle
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.example.rorusheild2/notification_settings").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "openNotificationSettings" -> {
+                    try {
+                        val intent = Intent()
+                        intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, applicationContext.packageName)
+                        // Bazı cihazlar için alternatif olarak aşağıdaki satır da eklenebilir:
+                        // intent.putExtra("app_package", applicationContext.packageName)
+                        // intent.putExtra("app_uid", applicationInfo.uid)
+                        startActivity(intent)
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.error("UNAVAILABLE", "Bildirim ayarları açılamadı", null)
+                    }
+                }
+                else -> result.notImplemented()
+            }
+        }
+
         // VPN ile ilgili kanal
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.example.rorusheild2/vpn_channel")
         channel.setMethodCallHandler { call, result ->

@@ -128,7 +128,17 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
 
   // 👇 Sistem bildirim ayarlarına yönlendir
   Future<void> _openNotificationSettings() async {
-    await openAppSettings();
+    // Android'de uygulamanın kendi bildirim ayarlarını açmak için platform channel kullan
+    if (Theme.of(context).platform == TargetPlatform.android) {
+      const platform = MethodChannel('com.example.rorusheild2/notification_settings');
+      try {
+        await platform.invokeMethod('openNotificationSettings');
+      } catch (e) {
+        await openAppSettings(); // Yedek: genel ayarlara yönlendir
+      }
+    } else {
+      await openAppSettings(); // iOS ve diğer platformlar
+    }
   }
 
   Widget buildMenuItem(BuildContext context, IconData icon, String title, VoidCallback onTap) {
