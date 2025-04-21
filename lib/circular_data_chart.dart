@@ -34,15 +34,15 @@ class CircularDataChart extends StatefulWidget {
   State<CircularDataChart> createState() => _CircularDataChartState();
 }
 
-class _CircularDataChartState extends State<CircularDataChart> {
+class _CircularDataChartState extends State<CircularDataChart> with SingleTickerProviderStateMixin {
   int selectedAppIndex = 0;
   List<AppData> apps = [];
 
   final List<Map<String, dynamic>> categories = [
-    {'name': 'Toplam Download', 'icon': Icons.download, 'usage': 0.0},
-    {'name': 'Toplam Upload', 'icon': Icons.upload, 'usage': 0.0},
-    {'name': 'Toplam Wi‑Fi', 'icon': Icons.wifi, 'usage': 0.0},
-    {'name': 'Toplam Mobile', 'icon': Icons.cell_tower, 'usage': 0.0},
+    {'name': 'Download', 'icon': Icons.download, 'usage': 0.0},
+    {'name': 'Upload', 'icon': Icons.upload, 'usage': 0.0},
+    {'name': 'Wi‑Fi', 'icon': Icons.wifi, 'usage': 0.0},
+    {'name': 'Mobile', 'icon': Icons.cell_tower, 'usage': 0.0},
   ];
 
   static const MethodChannel _appUsageChannel =
@@ -51,10 +51,22 @@ class _CircularDataChartState extends State<CircularDataChart> {
   MethodChannel('com.example.rorusheild2/network_usage');
 
   Timer? _usageTimer;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+    _animationController.forward();
+
     _loadAppUsage();
     _loadDetailedUsage();
     _usageTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
@@ -89,24 +101,18 @@ class _CircularDataChartState extends State<CircularDataChart> {
       final Map<dynamic, dynamic> result =
       await _networkUsageChannel.invokeMethod('getDetailedNetworkUsage');
 
-      // Kotlin tarafından gönderilen toplam değerleri al
       final double totalRx = (result['totalRx'] as num).toDouble();
       final double totalTx = (result['totalTx'] as num).toDouble();
-      final double totalWifi = result.containsKey('totalWifi') ? (result['totalWifi'] as num).toDouble() : 0.0;
-      final double totalMobile = result.containsKey('totalMobile') ? (result['totalMobile'] as num).toDouble() : 0.0;
-
-      // Uygulamaların toplam kullanımını hesapla
-      double totalAppUsage = 0.0;
-      for (var app in apps) {
-        totalAppUsage += app.usage;
-      }
+      final double wifiRx = (result['wifiRx'] as num).toDouble();
+      final double wifiTx = (result['wifiTx'] as num).toDouble();
+      final double mobileRx = (result['mobileRx'] as num).toDouble();
+      final double mobileTx = (result['mobileTx'] as num).toDouble();
 
       setState(() {
-        // Kategorileri gerçek toplam değerlerle güncelle
-        categories[0]['usage'] = totalRx;       // Toplam Download
-        categories[1]['usage'] = totalTx;       // Toplam Upload
-        categories[2]['usage'] = totalWifi;     // Toplam Wi-Fi
-        categories[3]['usage'] = totalMobile;   // Toplam Mobile
+        categories[0]['usage'] = totalRx;
+        categories[1]['usage'] = totalTx;
+        categories[2]['usage'] = wifiRx + wifiTx;
+        categories[3]['usage'] = mobileRx + mobileTx;
       });
     } catch (e) {
       print("Detaylı network verisi alınırken hata: $e");
@@ -116,6 +122,7 @@ class _CircularDataChartState extends State<CircularDataChart> {
   @override
   void dispose() {
     _usageTimer?.cancel();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -137,12 +144,18 @@ class _CircularDataChartState extends State<CircularDataChart> {
                 SizedBox(
                   width: 240,
                   height: 240,
-                  child: CustomPaint(
-                    painter: CircularChartPainter(
-                      segments: [...apps.map((e) => e.usage)],
-                      colors: [...apps.map((e) => Colors.blue)],
-                      selectedIndex: selectedAppIndex,
-                    ),
+                  child: AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (context, child) {
+                      return CustomPaint(
+                        painter: CircularChartPainter(
+                          segments: [...apps.map((e) => e.usage)],
+                          colors: [...apps.map((e) => Colors.blue)],
+                          selectedIndex: selectedAppIndex,
+                          animationValue: _animation.value,
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Column(
@@ -196,6 +209,8 @@ class _CircularDataChartState extends State<CircularDataChart> {
                 final app = apps[index];
                 return GestureDetector(
                   onTap: () {
+                    _animationController.reset();
+                    _animationController.forward();
                     setState(() {
                       selectedAppIndex = index;
                     });
@@ -259,13 +274,16 @@ class CircularChartPainter extends CustomPainter {
   final List<double> segments;
   final List<Color> colors;
   final int selectedIndex;
+  final double animationValue;
 
   CircularChartPainter({
     required this.segments,
     required this.colors,
     required this.selectedIndex,
+    required this.animationValue,
   });
 
+  @override
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
@@ -275,25 +293,31 @@ class CircularChartPainter extends CustomPainter {
       ..strokeCap = StrokeCap.butt
       ..strokeWidth = 25;
 
-    double currentAngle = -90 * (3.14159 / 180);
     final total = segments.reduce((a, b) => a + b);
+    final double selectedValue = segments[selectedIndex];
+    final double selectedAngle = (selectedValue / total) * 2 * 3.14159 * animationValue;
 
-    List<double> rotatedSegments = [...segments.sublist(selectedIndex), ...segments.sublist(0, selectedIndex)];
-    List<Color> rotatedColors = [...colors.sublist(selectedIndex), ...colors.sublist(0, selectedIndex)];
+    // Sabit arka plan halkası (açık mavi)
+    paint.color = Colors.blue.withOpacity(0.1);
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      -90 * (3.14159 / 180),
+      2 * 3.14159,
+      false,
+      paint,
+    );
 
-    for (int i = 0; i < rotatedSegments.length; i++) {
-      final sweepAngle = (rotatedSegments[i] / total) * 2 * 3.14159;
-      paint.color = (i == 0) ? rotatedColors[i] : rotatedColors[i].withOpacity(0.1);
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: radius),
-        currentAngle,
-        sweepAngle,
-        false,
-        paint,
-      );
-      currentAngle += sweepAngle;
-    }
+    // Seçilen segment (koyu mavi animasyonlu)
+    paint.color = colors[selectedIndex];
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      -90 * (3.14159 / 180),
+      selectedAngle,
+      false,
+      paint,
+    );
   }
+
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
