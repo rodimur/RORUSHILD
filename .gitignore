@@ -12,4 +12,5 @@ android/.gradle/
 android/app/debug
 android/app/profile
 android/app/release
+android/app/.cxx/
 .DS_Store

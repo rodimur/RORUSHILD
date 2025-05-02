@@ -1,10 +1,8 @@
 # This is a generated file; do not edit or check into version control.
 device_info_plus=/Users/rodi/.pub-cache/hosted/pub.dev/device_info_plus-11.4.0/
-file_picker=/Users/rodi/.pub-cache/hosted/pub.dev/file_picker-10.1.2/
 flutter_local_notifications=/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications-19.1.0/
 flutter_local_notifications_linux=/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications_linux-6.0.0/
 flutter_local_notifications_windows=/Users/rodi/.pub-cache/hosted/pub.dev/flutter_local_notifications_windows-1.0.0/
-flutter_plugin_android_lifecycle=/Users/rodi/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.28/
 path_provider=/Users/rodi/.pub-cache/hosted/pub.dev/path_provider-2.1.5/
 path_provider_android=/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_android-2.2.17/
 path_provider_foundation=/Users/rodi/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1/

@@ -25,6 +25,11 @@ class HelpScreen extends StatelessWidget {
       desc: 'Tüm tehdit geçmişinizi PDF olarak dışa aktarın ve raporunuzu kolayca paylaşın.',
     ),
     _GuideStep(
+      icon: Icons.backup,
+      title: 'Veritabanı Yedekleme ve Geri Yükleme',
+      desc: 'Menüden "Verileri Yedekle" ile veritabanınızı cihazınıza kaydedebilir, "Verileri Geri Yükle" ile önceden alınan yedeği tekrar yükleyebilirsiniz. Böylece verileriniz güvende ve taşınabilir olur.',
+    ),
+    _GuideStep(
       icon: Icons.notifications_active,
       title: 'Bildirimlerle Haberdar Olun',
       desc: 'Güvenlik için anlık bildirimler alın. Bildirim izinlerinizi kolayca yönetin.',

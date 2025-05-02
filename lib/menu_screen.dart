@@ -4,6 +4,7 @@ import 'package:rorusheild2/feedback_screen.dart';
 import 'package:rorusheild2/help_screen.dart';
 import 'package:rorusheild2/services/notification_service.dart';
 import 'package:rorusheild2/services/pdf_report_service.dart';
+import 'package:rorusheild2/services/database_backup_service.dart';
 import 'package:rorusheild2/share_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
@@ -125,6 +126,137 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
       }
     }
   }
+
+  Future<void> _backupDatabase() async {
+    try {
+      final status = await Permission.storage.status;
+      if (status.isDenied) {
+        final result = await Permission.storage.request();
+        if (!result.isGranted) {
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Depolama İzni Gerekli'),
+                  content: const Text('Veritabanını yedeklemek için depolama izni gereklidir. Lütfen ayarlardan izin verin.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('İptal'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        try {
+                          await platform.invokeMethod('openStorageSettings');
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Ayarlar açılamadı: $e'),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: const Text('Ayarları Aç'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+          return;
+        }
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Veritabanı yedekleniyor...')),
+        );
+      }
+      final path = await DatabaseBackupService.backupDatabase();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Veritabanı Download klasörüne kaydedildi: ${path.split('/').last}')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Yedekleme sırasında hata oluştu: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _restoreDatabase() async {
+    try {
+      final status = await Permission.storage.status;
+      if (status.isDenied) {
+        final result = await Permission.storage.request();
+        if (!result.isGranted) {
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Depolama İzni Gerekli'),
+                  content: const Text('Veritabanını geri yüklemek için depolama izni gereklidir. Lütfen ayarlardan izin verin.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('İptal'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        try {
+                          await platform.invokeMethod('openStorageSettings');
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Ayarlar açılamadı: $e'),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: const Text('Ayarları Aç'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+          return;
+        }
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Yedek dosyası seçiliyor...')),
+        );
+      }
+      final path = await DatabaseBackupService.restoreDatabase();
+      if (mounted && path != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Veritabanı başarıyla geri yüklendi. Uygulamayı yeniden başlatmanız önerilir.')),
+        );
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Geri yükleme işlemi iptal edildi veya başarısız oldu.')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Geri yükleme sırasında hata oluştu: $e')),
+        );
+      }
+    }
+  }
+
 
   // 👇 Sistem bildirim ayarlarına yönlendir
   Future<void> _openNotificationSettings() async {
@@ -250,6 +382,8 @@ class _MenuScreenState extends State<MenuScreen> with WidgetsBindingObserver {
                     );
                   }),
                   buildMenuItem(context, Icons.analytics_outlined, "Tehdit Analizi Raporu", _downloadThreatReport),
+                  buildMenuItem(context, Icons.backup_outlined, "Verileri Yedekle", _backupDatabase),
+                  buildMenuItem(context, Icons.restore_outlined, "Verileri Geri Yükle", _restoreDatabase),
                   const SizedBox(height: 10),
                   const Spacer(),
                   Row(
